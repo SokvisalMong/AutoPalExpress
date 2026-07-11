@@ -1,0 +1,16 @@
+.git
+.gitignore
+.claude/
+.venv/
+.venv312/
+venv/
+__pycache__/
+*.pyc
+backend.log
+data/
+servers/
+dist/
+build/
+installer_output/
+web/node_modules/
+web/dist/

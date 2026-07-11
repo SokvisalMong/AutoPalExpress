@@ -1,0 +1,1266 @@
+{
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "mods": "Mods",
+    "control": "Contrôle du serveur",
+    "worldSettings": "Paramètres du monde",
+    "launcherOptions": "Options de lancement",
+    "logs": "Journaux",
+    "settings": "Paramètres",
+    "superAdmin": "Super administrateur",
+    "hostControls": "Contrôles de l'hôte",
+    "hostOnlyBadge": "Visible uniquement par le super administrateur"
+  },
+  "topbar": {
+    "pages": {
+      "dashboard": {
+        "title": "Tableau de bord",
+        "subtitle": "Les signes vitaux de votre royaume et les âmes qui y errent"
+      },
+      "mods": {
+        "title": "Mods",
+        "subtitle": "Enchantements tissés dans votre serveur"
+      },
+      "control": {
+        "title": "Contrôle du serveur",
+        "subtitle": "Décidez du destin de votre royaume"
+      },
+      "worldSettings": {
+        "title": "Paramètres du monde",
+        "subtitle": "Chaque règle que le fichier de configuration de votre serveur peut exprimer"
+      },
+      "launcherOptions": {
+        "title": "Options de lancement",
+        "subtitle": "Arguments de démarrage pour le serveur sélectionné"
+      },
+      "logs": {
+        "title": "Journaux",
+        "subtitle": "La chronique des événements récents"
+      },
+      "settings": {
+        "title": "Paramètres",
+        "subtitle": "Définissez les lois de votre monde"
+      },
+      "superAdmin": {
+        "title": "Super administrateur",
+        "subtitle": "Exposition réseau et accès, réservé à l'hôte"
+      }
+    },
+    "instanceSwitcher": {
+      "currentServer": "Serveur actuel :",
+      "noServerSelected": "Aucun serveur sélectionné",
+      "noServersYet": "Aucun serveur pour l'instant",
+      "newServer": "Nouveau serveur..."
+    },
+    "userMenu": {
+      "superAdmin": "Super administrateur",
+      "admin": "Administrateur",
+      "logOut": "Déconnexion"
+    },
+    "languageSwitcher": {
+      "label": "Langue"
+    }
+  },
+  "worldSettings": {
+    "groups": {
+      "Identity and Access": "Identité et accès",
+      "World Rules": "Règles du monde",
+      "Combat": "Combat",
+      "Progression": "Progression",
+      "Time and Survival": "Temps et survie",
+      "World Density": "Densité du monde",
+      "Bases and Work": "Bases et travail",
+      "Saving and Backups": "Sauvegardes",
+      "Performance Limits": "Limites de performance",
+      "Mods and Compatibility": "Mods et compatibilité",
+      "Local API": "API locale",
+      "Other": "Autre"
+    },
+    "fields": {
+      "ServerName": {
+        "label": "Nom du serveur",
+        "help": "Le nom que voient les joueurs en connexion directe et dans les listes de serveurs. Redémarrez le serveur après l'avoir changé."
+      },
+      "ServerDescription": {
+        "label": "Description du serveur",
+        "help": "Courte description publique affichée par Palworld là où les détails du serveur apparaissent."
+      },
+      "ServerPassword": {
+        "label": "Mot de passe du serveur",
+        "help": "Les joueurs ont besoin de ce mot de passe pour rejoindre. Vide signifie que quiconque peut atteindre le serveur peut tenter de le rejoindre.",
+        "description": "Laisser vide pour aucun mot de passe."
+      },
+      "AdminPassword": {
+        "label": "Mot de passe administrateur",
+        "help": "AutoPalExpress l'utilise pour les actions de l'API REST Palworld : liste des joueurs, sauvegarde, diffusion, expulsion et bannissement.",
+        "description": "Nécessaire pour les commandes d'administration en jeu et l'API REST locale."
+      },
+      "ServerPlayerMaxNum": {
+        "label": "Nombre max. de joueurs",
+        "help": "Nombre maximal de joueurs connectés. Des valeurs plus élevées permettent plus de joueurs mais peuvent augmenter la charge CPU, RAM et réseau."
+      },
+      "CoopPlayerMaxNum": {
+        "label": "Max. joueurs par groupe",
+        "help": "Nombre maximal de joueurs dans un groupe de jeu/guilde. Des valeurs plus élevées permettent des groupes plus grands."
+      },
+      "Difficulty": {
+        "label": "Difficulté",
+        "help": "Sélecteur de difficulté prédéfinie. \"Aucune\" est le mode personnalisé habituel des serveurs dédiés ; les autres valeurs ne s'appliquent que si le serveur Palworld installé les reconnaît.",
+        "options": {
+          "None": {
+            "label": "Aucune",
+            "description": "Mode serveur personnalisé par défaut de Palworld."
+          },
+          "Easy": {
+            "label": "Facile",
+            "description": "Un préréglage plus doux si le serveur installé le prend en charge."
+          },
+          "Normal": {
+            "label": "Normal",
+            "description": "Préréglage standard si le serveur installé le prend en charge."
+          },
+          "Hard": {
+            "label": "Difficile",
+            "description": "Un préréglage plus dur si le serveur installé le prend en charge."
+          }
+        }
+      },
+      "DeathPenalty": {
+        "label": "Pénalité de mort",
+        "help": "Contrôle ce qu'un joueur perd à sa mort. Une pénalité plus élevée est plus sévère.",
+        "options": {
+          "None": {
+            "label": "Aucune",
+            "description": "Aucune perte d'objet ou de Pal à la mort."
+          },
+          "Item": {
+            "label": "Objets",
+            "description": "Les objets de l'inventaire tombent, mais l'équipement et les Pals sont conservés."
+          },
+          "ItemAndEquipment": {
+            "label": "Objets et équipement",
+            "description": "Les objets de l'inventaire et l'équipement porté tombent."
+          },
+          "All": {
+            "label": "Tout",
+            "description": "L'inventaire, l'équipement et les Pals de l'équipe tombent."
+          }
+        }
+      },
+      "bIsPvP": {
+        "label": "JcJ activé",
+        "help": "Permet aux joueurs de se blesser et de se combattre mutuellement lorsqu'activé."
+      },
+      "bEnableFriendlyFire": {
+        "label": "Tir ami",
+        "help": "Autorise les dégâts aux alliés ou cibles amicales. Gardez désactivé pour un serveur coopératif plus sûr."
+      },
+      "bHardcore": {
+        "label": "Mode hardcore",
+        "help": "Un mode de survie difficile avec des conséquences de mort permanentes. Ne provoque pas en soi la perte des Pals - voir Perte permanente des Pals ci-dessous."
+      },
+      "bPalLost": {
+        "label": "Perte permanente des Pals",
+        "help": "Bascule dédiée de permadeath des Pals de Palworld. Indépendante du Mode hardcore - l'une peut être activée sans l'autre.",
+        "description": "Les Pals sont perdus définitivement à la mort."
+      },
+      "ExpRate": {
+        "label": "Taux d'XP",
+        "help": "Multiplicateur d'expérience. Exemple : 0,5 divise par deux la vitesse de montée de niveau, 1 est normal, 2 double l'XP gagnée."
+      },
+      "PalCaptureRate": {
+        "label": "Taux de capture",
+        "help": "Multiplicateur de chance de capture. Exemple : 0,5 rend les captures environ deux fois moins probables, 1 est normal, 2 rend les captures bien plus faciles."
+      },
+      "PalSpawnNumRate": {
+        "label": "Taux d'apparition des Pals",
+        "help": "Multiplicateur d'apparition des Pals. Exemple : 0,5 signifie moins de Pals sauvages, 1 est normal, 2 double environ la densité d'apparition et la charge serveur."
+      },
+      "PalDamageRateAttack": {
+        "label": "Taux de dégâts infligés par les Pals",
+        "help": "Dégâts infligés par les Pals. Exemple : 0,5 divise par deux les dégâts d'attaque des Pals, 1 est normal, 2 les double."
+      },
+      "PalDamageRateDefense": {
+        "label": "Taux de dégâts subis par les Pals",
+        "help": "Dégâts subis par les Pals. Exemple : 0,5 fait subir la moitié des dégâts aux Pals, 1 est normal, 2 leur fait subir le double."
+      },
+      "PlayerDamageRateAttack": {
+        "label": "Taux de dégâts infligés par les joueurs",
+        "help": "Dégâts infligés par les joueurs. Exemple : 0,5 divise par deux les dégâts des joueurs, 1 est normal, 2 les double."
+      },
+      "PlayerDamageRateDefense": {
+        "label": "Taux de dégâts subis par les joueurs",
+        "help": "Dégâts subis par les joueurs. Exemple : 0,5 fait subir la moitié des dégâts aux joueurs, 1 est normal, 2 leur fait subir le double."
+      },
+      "DayTimeSpeedRate": {
+        "label": "Vitesse du jour",
+        "help": "Multiplicateur de vitesse du jour. Exemple : 0,5 fait durer le jour plus longtemps, 1 est normal, 2 fait passer le jour deux fois plus vite."
+      },
+      "NightTimeSpeedRate": {
+        "label": "Vitesse de la nuit",
+        "help": "Multiplicateur de vitesse de la nuit. Exemple : 0,5 fait durer la nuit plus longtemps, 1 est normal, 2 fait passer la nuit deux fois plus vite."
+      },
+      "WorkSpeedRate": {
+        "label": "Vitesse de travail",
+        "help": "Multiplicateur de vitesse de travail. Exemple : 0,5 réduit le travail à moitié vitesse, 1 est normal, 2 double la vitesse de travail."
+      },
+      "DropItemMaxNum": {
+        "label": "Max. objets au sol",
+        "help": "Nombre maximal d'objets au sol dans le monde. Exemple : 500 garde le monde plus propre, 3000 est la valeur habituelle de Palworld, 5000 conserve plus d'objets mais peut nuire aux performances."
+      },
+      "BaseCampMaxNum": {
+        "label": "Max. bases",
+        "help": "Nombre total de bases autorisées sur le serveur. Exemple : 32 est restrictif, 128 est courant, 256 autorise beaucoup de bases mais augmente la charge serveur."
+      },
+      "BaseCampWorkerMaxNum": {
+        "label": "Max. ouvriers par base",
+        "help": "Nombre maximal de Pals assignés à une base. Exemple : 10 est léger, 15 est courant, 20+ permet des bases plus actives mais augmente la charge de traitement."
+      },
+      "GuildPlayerMaxNum": {
+        "label": "Taille max. de guilde",
+        "help": "Nombre maximal de joueurs dans une guilde. Exemple : 10 garde les guildes petites, 20 est courant, 32 permet des groupes partagés plus grands."
+      },
+      "AutoSaveSpan": {
+        "label": "Intervalle de sauvegarde auto (minutes)",
+        "help": "Minutes entre les sauvegardes automatiques. Exemple : 10 sauvegarde souvent, 30 est modéré, 60 réduit l'activité disque mais risque plus de perte après un crash."
+      },
+      "bIsUseBackupSaveData": {
+        "label": "Conserver les sauvegardes",
+        "help": "Palworld conserve des sauvegardes tournantes. Utile pour la récupération, mais augmente l'activité disque et l'utilisation du stockage."
+      },
+      "RESTAPIEnabled": {
+        "label": "API REST activée",
+        "help": "Nécessaire pour la liste des joueurs, les sauvegardes, les métriques, l'expulsion/le bannissement, les diffusions et l'arrêt propre d'AutoPalExpress."
+      },
+      "RESTAPIPort": {
+        "label": "Port de l'API REST",
+        "help": "Port local utilisé par l'API REST de Palworld. Ne redirigez pas ce port directement ; AutoPalExpress s'y connecte localement."
+      },
+      "CrossplayPlatforms": {
+        "label": "Plateformes de jeu croisé",
+        "help": "Quelles plateformes clientes peuvent se connecter. \"Toutes les plateformes\" offre la plus large compatibilité ; \"Steam uniquement\" est le choix courant le plus restrictif.",
+        "options": {
+          "(Steam)": {
+            "label": "Steam uniquement",
+            "description": "Seuls les clients Steam peuvent se connecter."
+          },
+          "(Xbox)": {
+            "label": "Xbox uniquement",
+            "description": "Seuls les clients Xbox/Game Pass peuvent se connecter."
+          },
+          "(PS5)": {
+            "label": "PS5 uniquement",
+            "description": "Seuls les clients PlayStation 5 peuvent se connecter."
+          },
+          "(Mac)": {
+            "label": "Mac uniquement",
+            "description": "Seuls les clients Mac peuvent se connecter."
+          },
+          "(Steam,Xbox)": {
+            "label": "Steam + Xbox",
+            "description": "Autoriser les clients Steam et Xbox/Game Pass."
+          },
+          "(Steam,Xbox,PS5,Mac)": {
+            "label": "Toutes les plateformes",
+            "description": "Autoriser les clients Steam, Xbox/Game Pass, PS5 et Mac."
+          }
+        }
+      },
+      "LogFormatType": {
+        "label": "Format des journaux",
+        "help": "Le texte est plus facile à lire pour un humain. JSON est préférable si un outil externe analyse la sortie du serveur.",
+        "options": {
+          "Text": {
+            "label": "Texte",
+            "description": "Journaux serveur lisibles par un humain."
+          },
+          "Json": {
+            "label": "JSON",
+            "description": "Journaux structurés pour outils externes."
+          }
+        }
+      },
+      "RandomizerType": {
+        "label": "Mode aléatoire des Pals",
+        "help": "\"Aucun\" conserve les apparitions normales. \"Région\" randomise à l'intérieur de chaque région. \"Tout\" randomise entièrement les apparitions de Pals dans le monde entier.",
+        "options": {
+          "None": {
+            "label": "Aucun",
+            "description": "Aucune randomisation d'apparition des Pals."
+          },
+          "Region": {
+            "label": "Région",
+            "description": "Randomise les apparitions de Pals au sein de chaque région."
+          },
+          "All": {
+            "label": "Tout",
+            "description": "Randomise entièrement les apparitions de Pals dans le monde entier."
+          }
+        }
+      },
+      "bIsRandomizerPalLevelRandom": {
+        "label": "Randomiser les niveaux des Pals",
+        "help": "Si activé, les Pals sauvages randomisés peuvent avoir des niveaux totalement aléatoires. Si désactivé, les niveaux restent plus proches de la plage prévue pour chaque zone."
+      },
+      "bEnableFastTravel": {
+        "label": "Voyage rapide activé",
+        "help": "Autorise le voyage rapide normal lorsqu'activé."
+      },
+      "bEnableFastTravelOnlyBaseCamp": {
+        "label": "Voyage rapide entre bases uniquement",
+        "help": "Restreint le voyage rapide aux camps de base au lieu de tout point de voyage rapide."
+      },
+      "bIsStartLocationSelectByMap": {
+        "label": "Choisir le lieu de départ sur la carte",
+        "help": "Permet aux nouveaux personnages de choisir un lieu de départ sur la carte."
+      },
+      "bShowPlayerList": {
+        "label": "Afficher la liste des joueurs",
+        "help": "Affiche la liste des joueurs dans le menu Échap de Palworld lorsqu'activé."
+      },
+      "bAllowClientMod": {
+        "label": "Autoriser les mods côté client",
+        "help": "Permet aux joueurs avec des mods client activés de rejoindre. Plus permissif, mais plus difficile à gérer si les configurations de mods diffèrent."
+      },
+      "bEnableInvaderEnemy": {
+        "label": "Activer les envahisseurs",
+        "help": "Active les événements d'envahisseurs. Le désactiver rend le monde plus calme."
+      },
+      "bEnableVoiceChat": {
+        "label": "Chat vocal activé",
+        "help": "Active le chat vocal en jeu."
+      },
+      "BaseCampMaxNumInGuild": {
+        "label": "Max. bases par guilde",
+        "help": "Nombre maximal de bases qu'une guilde peut posséder. Des valeurs plus élevées permettent une infrastructure de guilde plus grande mais augmentent la charge serveur."
+      },
+      "CollectionDropRate": {
+        "label": "Taux de récolte",
+        "help": "Multiplicateur de quantité d'objets récoltés. Exemple : 0,5 donne moins de ressources récoltées, 1 est normal, 2 double les récoltes."
+      },
+      "CollectionObjectHpRate": {
+        "label": "Taux de PV des objets récoltables",
+        "help": "Points de vie des objets récoltables. Exemple : 0,5 fait casser les nœuds plus vite, 1 est normal, 2 fait mettre plus longtemps à casser les nœuds."
+      },
+      "CollectionObjectRespawnSpeedRate": {
+        "label": "Taux de réapparition des récoltables",
+        "help": "Vitesse de réapparition des récoltables. Exemple : 0,5 ralentit le retour des ressources, 1 est normal, 2 fait revenir les récoltables plus vite."
+      },
+      "EnemyDropItemRate": {
+        "label": "Taux de butin des ennemis",
+        "help": "Multiplicateur de quantité de butin des ennemis. Exemple : 0,5 donne moins de butin, 1 est normal, 2 double le butin des ennemis."
+      },
+      "PalEggDefaultHatchingTime": {
+        "label": "Temps d'éclosion des œufs (heures)",
+        "help": "Temps d'éclosion des Œufs géants en heures. Exemple : 0 accélère fortement les œufs, 2 est court, 72 est très long."
+      },
+      "SupplyDropSpan": {
+        "label": "Intervalle de largage de ravitaillement (minutes)",
+        "help": "Minutes entre les événements de météorites ou de largage de ravitaillement. Exemple : 30 est fréquent, 180 est modéré, 360 est rare."
+      },
+      "BuildObjectDamageRate": {
+        "label": "Taux de dégâts aux structures",
+        "help": "Dégâts infligés aux bâtiments. Exemple : 0,5 divise par deux les dégâts aux structures, 1 est normal, 2 les double."
+      },
+      "BuildObjectDeteriorationDamageRate": {
+        "label": "Taux de dégradation des bâtiments",
+        "help": "Vitesse de dégradation des bâtiments. Exemple : 0 désactive ou ralentit fortement la dégradation sur de nombreux serveurs, 1 est normal, 2 se dégrade plus vite."
+      },
+      "ItemWeightRate": {
+        "label": "Taux de poids des objets",
+        "help": "Multiplicateur de poids des objets. Exemple : 0,5 allège les objets, 1 est normal, 2 double leur poids."
+      },
+      "PlayerStaminaDecreaceRate": {
+        "label": "Taux d'endurance des joueurs",
+        "help": "Multiplicateur de consommation d'endurance des joueurs. Exemple : 0,5 consomme l'endurance plus lentement, 1 est normal, 2 la consomme deux fois plus vite."
+      },
+      "PalStaminaDecreaceRate": {
+        "label": "Taux d'endurance des Pals",
+        "help": "Multiplicateur de consommation d'endurance des Pals. Exemple : 0,5 consomme l'endurance des Pals plus lentement, 1 est normal, 2 la consomme deux fois plus vite."
+      },
+      "PlayerStomachDecreaceRate": {
+        "label": "Taux de faim des joueurs",
+        "help": "Multiplicateur de consommation de faim des joueurs. Exemple : 0,5 fait durer la nourriture plus longtemps, 1 est normal, 2 fait monter la faim deux fois plus vite."
+      },
+      "PalStomachDecreaceRate": {
+        "label": "Taux de faim des Pals",
+        "help": "Multiplicateur de consommation de faim des Pals. Exemple : 0,5 fait durer la nourriture des Pals plus longtemps, 1 est normal, 2 fait monter la faim deux fois plus vite."
+      },
+      "PlayerAutoHPRegeneRate": {
+        "label": "Taux de régénération des PV des joueurs",
+        "help": "Multiplicateur de régénération naturelle des PV des joueurs. Exemple : 0,5 soigne plus lentement, 1 est normal, 2 soigne deux fois plus vite."
+      },
+      "PalAutoHPRegeneRate": {
+        "label": "Taux de régénération des PV des Pals",
+        "help": "Multiplicateur de régénération naturelle des PV des Pals. Exemple : 0,5 soigne plus lentement, 1 est normal, 2 soigne deux fois plus vite."
+      },
+      "ServerReplicatePawnCullDistance": {
+        "label": "Distance de synchronisation des Pals",
+        "help": "Distance en centimètres pour synchroniser les Pals avec les joueurs. Exemple : 10000 est une portée plus courte, 15000 est modéré, 20000+ synchronise plus loin mais coûte en performance."
+      },
+      "MaxBuildingLimitNum": {
+        "label": "Max. bâtiments par joueur",
+        "help": "Plafond de bâtiments par joueur. Exemple : 0 signifie illimité, 5000 est restrictif, 20000 permet beaucoup plus de construction mais peut coûter en performance."
+      },
+      "PhysicsActiveDropItemMaxNum": {
+        "label": "Max. objets physiques",
+        "help": "Nombre maximal d'objets au sol avec comportement physique. Exemple : 50 est léger, 100 est modéré, 300 garde plus d'objets physiques actifs mais peut coûter en performance."
+      },
+      "RandomizerSeed": {
+        "label": "Graine du randomiseur",
+        "help": "Graine optionnelle pour la randomisation d'apparition des Pals. Laisser vide pour une graine aléatoire à chaque fois ; définir une valeur pour reproduire la même disposition randomisée."
+      },
+      "bEnablePlayerToPlayerDamage": {
+        "label": "Dégâts entre joueurs",
+        "help": "Permet aux joueurs d'infliger des dégâts directement les uns aux autres. Fonctionne avec JcJ activé - désactivez les deux pour un serveur entièrement coopératif."
+      },
+      "bCharacterRecreateInHardcore": {
+        "label": "Autoriser un nouveau personnage après une mort hardcore",
+        "help": "En Mode hardcore, permet à un joueur de créer un nouveau personnage après sa mort au lieu d'être définitivement exclu."
+      },
+      "bExistPlayerAfterLogout": {
+        "label": "Dormir à la déconnexion",
+        "help": "Si activé, le personnage d'un joueur reste endormi dans le monde à son emplacement actuel après la déconnexion, au lieu de disparaître."
+      },
+      "bIsShowJoinLeftMessage": {
+        "label": "Messages natifs d'arrivée/départ",
+        "help": "Message système en jeu propre à Palworld lorsqu'un joueur rejoint ou part. Distinct de l'option de diffusion d'arrivée/départ d'AutoPalExpress dans l'automatisation."
+      },
+      "ChatPostLimitPerMinute": {
+        "label": "Messages de chat par minute",
+        "help": "Nombre maximal de messages de chat qu'un joueur peut envoyer par minute. Des valeurs plus basses réduisent le spam."
+      },
+      "bEnableNonLoginPenalty": {
+        "label": "Activer la pénalité d'inactivité",
+        "help": "Applique une pénalité aux joueurs qui ne se sont pas connectés depuis un moment."
+      },
+      "bAllowGlobalPalboxExport": {
+        "label": "Autoriser l'export vers la Palbox globale",
+        "help": "Permet aux joueurs de sauvegarder un Pal dans la Palbox globale partagée, pour l'utiliser sur d'autres sauvegardes ou serveurs prenant en charge l'import."
+      },
+      "bAllowGlobalPalboxImport": {
+        "label": "Autoriser l'import depuis la Palbox globale",
+        "help": "Permet aux joueurs de charger un Pal précédemment sauvegardé dans la Palbox globale partagée."
+      },
+      "GuildRejoinCooldownMinutes": {
+        "label": "Délai avant de rejoindre une guilde (minutes)",
+        "help": "Minutes qu'un joueur doit attendre avant de rejoindre à nouveau une guilde qu'il vient de quitter."
+      },
+      "bAutoResetGuildNoOnlinePlayers": {
+        "label": "Réinitialiser automatiquement les guildes inactives",
+        "help": "Efface automatiquement les bases et revendications d'une guilde inactive après qu'aucun membre n'a été en ligne pendant la durée ci-dessous."
+      },
+      "AutoResetGuildTimeNoOnlinePlayers": {
+        "label": "Délai de réinitialisation de guilde inactive (heures)",
+        "help": "Heures sans membre de guilde en ligne avant que la réinitialisation automatique ne se déclenche, si activée ci-dessus."
+      },
+      "VoiceChatMaxVolumeDistance": {
+        "label": "Distance de volume max. du chat vocal",
+        "help": "Distance à laquelle le chat vocal atteint son volume maximal. Exemple : 3000 est la valeur habituelle de Palworld."
+      },
+      "VoiceChatZeroVolumeDistance": {
+        "label": "Distance de silence du chat vocal",
+        "help": "Distance à laquelle le chat vocal s'estompe jusqu'au silence. Exemple : 15000 est la valeur habituelle de Palworld."
+      },
+      "bAllowEnhanceStat_Health": {
+        "label": "Autoriser la répartition de points de PV",
+        "help": "Permet aux joueurs de dépenser des points de statut en Santé."
+      },
+      "bAllowEnhanceStat_Attack": {
+        "label": "Autoriser la répartition de points d'attaque",
+        "help": "Permet aux joueurs de dépenser des points de statut en Attaque."
+      },
+      "bAllowEnhanceStat_Stamina": {
+        "label": "Autoriser la répartition de points d'endurance",
+        "help": "Permet aux joueurs de dépenser des points de statut en Endurance."
+      },
+      "bAllowEnhanceStat_Weight": {
+        "label": "Autoriser la répartition de points de charge",
+        "help": "Permet aux joueurs de dépenser des points de statut en Capacité de charge."
+      },
+      "bAllowEnhanceStat_WorkSpeed": {
+        "label": "Autoriser la répartition de points de vitesse de travail",
+        "help": "Permet aux joueurs de dépenser des points de statut en Vitesse de travail."
+      },
+      "DenyTechnologyList": {
+        "label": "IDs de technologies désactivées",
+        "help": "IDs de technologies séparés par des virgules à masquer de l'arbre technologique. Laisser vide pour autoriser l'arbre complet."
+      },
+      "PalAutoHpRegeneRateInSleep": {
+        "label": "Taux de régén. des PV des Pals (au repos)",
+        "help": "Multiplicateur de régénération des PV des Pals au repos dans la Palbox. Exemple : 0,5 soigne plus lentement, 1 est normal, 2 soigne deux fois plus vite."
+      },
+      "PlayerAutoHpRegeneRateInSleep": {
+        "label": "Taux de régén. des PV des joueurs (endormi)",
+        "help": "Multiplicateur de régénération des PV des joueurs pendant le sommeil. Exemple : 0,5 soigne plus lentement, 1 est normal, 2 soigne deux fois plus vite."
+      },
+      "EquipmentDurabilityDamageRate": {
+        "label": "Taux d'usure de l'équipement",
+        "help": "Multiplicateur de perte de durabilité de l'équipement. Exemple : 0,5 divise par deux la perte de durabilité, 1 est normal, 2 use l'équipement deux fois plus vite."
+      },
+      "BlockRespawnTime": {
+        "label": "Délai de réapparition (secondes)",
+        "help": "Délai de réapparition de base en secondes après la mort."
+      },
+      "RespawnPenaltyDurationThreshold": {
+        "label": "Seuil de mort rapide (secondes)",
+        "help": "Temps de survie en secondes en dessous duquel une vie courte récente compte dans la pénalité de réapparition pour morts répétées."
+      },
+      "RespawnPenaltyTimeScale": {
+        "label": "Multiplicateur de pénalité de réapparition",
+        "help": "Multiplicateur appliqué au délai de réapparition en cas de morts rapides répétées."
+      },
+      "bDisplayPvPItemNumOnWorldMap_BaseCamp": {
+        "label": "Afficher le nombre d'objets JcJ de la base sur la carte",
+        "help": "Affiche sur la carte du monde le nombre d'objets pillables en JcJ d'une base."
+      },
+      "bDisplayPvPItemNumOnWorldMap_Player": {
+        "label": "Afficher le nombre d'objets JcJ du joueur sur la carte",
+        "help": "Affiche sur la carte du monde le nombre d'objets pillables en JcJ d'un joueur."
+      },
+      "bAdditionalDropItemWhenPlayerKillingInPvPMode": {
+        "label": "Objet bonus à l'élimination JcJ",
+        "help": "Active un objet supplémentaire pour le tueur après une élimination en JcJ, avec l'objet et la quantité ci-dessous."
+      },
+      "AdditionalDropItemWhenPlayerKillingInPvPMode": {
+        "label": "ID de l'objet bonus d'élimination JcJ",
+        "help": "ID de l'objet accordé en récompense supplémentaire pour une élimination en JcJ, si activé ci-dessus."
+      },
+      "AdditionalDropItemNumWhenPlayerKillingInPvPMode": {
+        "label": "Quantité de l'objet bonus d'élimination JcJ",
+        "help": "Quantité de l'objet bonus d'élimination JcJ, si activé ci-dessus."
+      },
+      "bInvisibleOtherGuildBaseCampAreaFX": {
+        "label": "Masquer l'effet de zone des bases des autres guildes",
+        "help": "Masque l'effet visuel de délimitation de base pour les bases des autres guildes."
+      },
+      "bBuildAreaLimit": {
+        "label": "Restreindre la construction près des points d'intérêt",
+        "help": "Restreint la construction à proximité de certains points d'intérêt et repères."
+      },
+      "bEnableDefenseOtherGuildPlayer": {
+        "label": "Les défenses de base ciblent les autres guildes",
+        "help": "Permet aux défenses de base de cibler les joueurs d'autres guildes."
+      },
+      "bCanPickupOtherGuildDeathPenaltyDrop": {
+        "label": "Autoriser le pillage des objets de mort d'autres guildes",
+        "help": "Permet aux joueurs de ramasser les objets de pénalité de mort laissés par les membres d'autres guildes."
+      },
+      "bEnableBuildingPlayerUIdDisplay": {
+        "label": "Afficher le constructeur de structure",
+        "help": "Affiche quel joueur a placé une structure lors de son inspection."
+      },
+      "MonsterFarmActionSpeedRate": {
+        "label": "Taux de vitesse des actions du ranch",
+        "help": "Multiplicateur de vitesse pour les actions de production du ranch/de la ferme de Pals. Exemple : 0,5 est plus lent, 1 est normal, 2 est deux fois plus rapide."
+      },
+      "ItemCorruptionMultiplier": {
+        "label": "Taux de corrosion des objets",
+        "help": "Multiplicateur de la vitesse à laquelle les objets se corrompent ou se dégradent avec le temps, sur les serveurs qui suivent la corruption des objets."
+      },
+      "EnablePredatorBossPal": {
+        "label": "Activer les Pals prédateurs",
+        "help": "Active les apparitions de Pals prédateurs (variantes boss)."
+      }
+    },
+    "chrome": {
+      "popularSettings": "Paramètres populaires",
+      "advancedSettings": "Paramètres avancés",
+      "hide": "Masquer",
+      "showAll": "Tout afficher ({{count}})",
+      "moreSettingsOne": "{{count}} paramètre supplémentaire, lu directement depuis le fichier de configuration de votre serveur.",
+      "moreSettingsMany": "{{count}} paramètres supplémentaires, lus directement depuis le fichier de configuration de votre serveur.",
+      "unrolling": "Déroulement de l'ancien parchemin...",
+      "allSaved": "Toutes les modifications sont enregistrées.",
+      "unsavedChangeOne": "{{count}} modification non enregistrée, appliquée au prochain démarrage du serveur.",
+      "unsavedChangeMany": "{{count}} modifications non enregistrées, appliquées au prochain démarrage du serveur.",
+      "saveChanges": "Enregistrer les modifications",
+      "saving": "Enregistrement...",
+      "settingsSavedTitle": "Paramètres enregistrés",
+      "settingsSavedMessage": "Les modifications prendront effet au prochain démarrage du serveur.",
+      "couldntSave": "Échec de l'enregistrement",
+      "unknownError": "Erreur inconnue.",
+      "enable": "Activer",
+      "disable": "Désactiver",
+      "currentValueUnknown": "Valeur actuelle",
+      "currentValueLabel": "{{value}} (actuel)",
+      "currentValueDescription": "Valeur actuellement stockée dans PalWorldSettings.ini.",
+      "helpBool": "Activé active ce paramètre. Désactivé le désactive.",
+      "helpInt": "Paramètre numérique. Exemple : 10 est une limite basse, 30 est modéré, 60+ est élevé. Le sens exact dépend du paramètre.",
+      "helpFloat": "Multiplicateur décimal. Exemple : 0,5 est demi-puissance/vitesse, 1,0 est normal, 2,0 est double.",
+      "helpRaw": "Valeur brute avancée de Palworld. Conservez le format existant sauf si vous connaissez la valeur exacte attendue par Palworld.",
+      "helpString": "Paramètre texte écrit directement dans PalWorldSettings.ini.",
+      "fieldHelpAria": "Aide pour {{label}}"
+    }
+  },
+  "dashboard": {
+    "loading": "Consultation de la boule de cristal...",
+    "noServerBanner": "Aucun serveur n'est encore configuré.",
+    "noServerCta": "Déployer ou importer un serveur dans Paramètres",
+    "map": "Carte :",
+    "uptime": "Disponibilité :",
+    "lastSaved": "Dernière sauvegarde :",
+    "never": "Jamais",
+    "stats": {
+      "cpu": "CPU",
+      "ram": "RAM",
+      "ramHint": "sur {{total}} Go",
+      "tickRate": "Fréquence de tick",
+      "tickRateTarget": "cible {{ms}} ms",
+      "tickRateUnavailable": "Métrique REST indisponible",
+      "players": "Joueurs",
+      "version": "Version",
+      "versionHint": "Build du serveur",
+      "mods": "Mods",
+      "modsHint": "Enchantements installés"
+    },
+    "roster": {
+      "title": "Liste des joueurs",
+      "searchPlaceholder": "Rechercher par nom de personnage...",
+      "tabs": {
+        "all": "Tous ({{count}})"
+      },
+      "status": {
+        "online": "En ligne",
+        "idle": "Inactif",
+        "offline": "Hors ligne"
+      },
+      "loading": "Invocation de la liste des joueurs...",
+      "empty": "Aucune âme ne correspond à votre recherche.",
+      "loadError": "Impossible de charger la liste des joueurs",
+      "guildRosterTitle": "Liste des guildes",
+      "guildColumns": {
+        "guild": "Guilde",
+        "members": "Membres",
+        "avgLevel": "Niv. moyen",
+        "avgPing": "Ping moyen"
+      },
+      "unaffiliated": "Sans guilde",
+      "kickDialog": {
+        "title": "Expulser ce joueur ?",
+        "description": "{{name}} sera déconnecté immédiatement et pourra se reconnecter librement.",
+        "confirm": "Expulser"
+      },
+      "banDialog": {
+        "title": "Bannir ce joueur ?",
+        "description": "{{name}} sera exclu définitivement jusqu'à ce que le bannissement soit levé.",
+        "confirm": "Bannir"
+      },
+      "unbanDialog": {
+        "title": "Lever ce bannissement ?",
+        "description": "{{name}} sera autorisé à rejoindre à nouveau le royaume.",
+        "confirm": "Débannir"
+      },
+      "messageDialog": {
+        "title": "Chuchoter à {{name}}",
+        "placeholder": "Tapez votre message...",
+        "cancel": "Annuler",
+        "send": "Envoyer",
+        "sending": "Envoi..."
+      },
+      "notifications": {
+        "kickedTitle": "Joueur expulsé",
+        "kickedMessage": "{{name}} a été retiré du royaume.",
+        "bannedTitle": "Joueur banni",
+        "bannedMessage": "{{name}} a été banni et rejeté.",
+        "unbannedTitle": "Bannissement levé",
+        "unbannedMessage": "{{name}} peut revenir dans le royaume.",
+        "messageSentTitle": "Message envoyé",
+        "messageSentMessage": "Message chuchoté livré à {{name}}."
+      },
+      "card": {
+        "banned": "Banni",
+        "sendMessage": "Envoyer un message",
+        "teleport": "Téléporter",
+        "comingSoon": "Bientôt disponible",
+        "viewInventory": "Voir l'inventaire",
+        "kick": "Expulser",
+        "unban": "Débannir",
+        "ban": "Bannir",
+        "level": "Niv.",
+        "guild": "Guilde :",
+        "onlineFor": "En ligne depuis",
+        "lastSeen": "Vu pour la dernière fois"
+      }
+    }
+  },
+  "mods": {
+    "title": "Le Grimoire",
+    "browseNexus": "Parcourir Nexus Mods",
+    "noModsPathBanner": "Aucun dossier Mods n'est encore configuré, les installations de fichiers vérifiées nécessitent donc d'abord une configuration dans Super Admin.",
+    "noModsPathCta": "Configurer dans Super Admin",
+    "noModsPathAskAdmin": "Demandez au super administrateur de le configurer.",
+    "status": {
+      "enabled": "activé",
+      "disabled": "désactivé",
+      "broken": "défaillant"
+    },
+    "dragHint": "Faites glisser la poignée pour changer la priorité de chargement",
+    "loading": "Descellement du grimoire...",
+    "removeDialog": {
+      "title": "Supprimer ce mod ?",
+      "description": "{{name}} sera définitivement retiré de l'ordre de chargement de votre serveur.",
+      "confirm": "Supprimer"
+    },
+    "notifications": {
+      "enabledTitle": "Mod activé",
+      "disabledTitle": "Mod désactivé",
+      "enabledMessage": "Les runes de {{name}} brillent désormais.",
+      "disabledMessage": "Les runes de {{name}} sont désormais éteintes.",
+      "updatedTitle": "Mod mis à jour",
+      "updatedMessage": "{{name}} a été reforgé en v{{version}}.",
+      "removedTitle": "Mod supprimé",
+      "removedMessage": "{{name}} a été rayé des archives."
+    },
+    "card": {
+      "dragToReorder": "Faire glisser pour réorganiser",
+      "brokenNotice": "Échec de l'initialisation — supprimez ou remplacez ce mod.",
+      "enabledLabel": "Activé",
+      "disabledLabel": "Désactivé",
+      "updateTo": "Mettre à jour vers {{version}}",
+      "remove": "Supprimer"
+    },
+    "ue4ss": {
+      "title": "Chargeur de mods UE4SS",
+      "description": "UE4SS est le chargeur de mods dont la plupart des mods Nexus ont besoin pour fonctionner réellement (scripts Lua et mods Logic/Blueprint placés dans votre dossier Mods). Installer un mod ne l'installe pas ; c'est une configuration séparée, à faire une seule fois.",
+      "checkErrorFallback": "Impossible de vérifier la dernière version d'UE4SS.",
+      "checkFailedTitle": "Échec de la vérification",
+      "installedTitle": "UE4SS installé",
+      "installedMessage": "La version {{version}} est prête.",
+      "installErrorFallback": "Impossible d'installer UE4SS.",
+      "installFailedTitle": "Échec de l'installation",
+      "removedTitle": "UE4SS supprimé",
+      "removedMessage": "Les mods Lua et Logic ne se chargeront plus.",
+      "installedStatus": "Installé · {{version}}",
+      "unknownVersion": "version inconnue",
+      "notInstalled": "Non installé",
+      "checking": "Vérification...",
+      "checkForUpdates": "Vérifier les mises à jour",
+      "latestRelease": "Dernière version :",
+      "updateAvailable": "Mise à jour disponible",
+      "setFolderFirst": "Définissez votre dossier de serveur Palworld ci-dessus avant d'installer.",
+      "installing": "Installation...",
+      "updateTo": "Mettre à jour vers {{version}}",
+      "reinstall": "Réinstaller",
+      "install": "Installer UE4SS",
+      "uninstall": "Désinstaller",
+      "antivirusNoticeBefore": "Certains antivirus signalent le fichier",
+      "antivirusNoticeAfter": "d'UE4SS car il utilise l'injection de DLL pour s'accrocher au jeu ; il s'agit d'un faux positif bien connu pour cet outil, pas d'une menace réelle.",
+      "uninstallDialog": {
+        "title": "Désinstaller UE4SS ?",
+        "description": "Cela supprime le chargeur UE4SS et ses mods intégrés. Les mods que vous avez installés vous-même (comme ceux de Nexus) restent en place, mais ne se chargeront plus sans lui.",
+        "confirm": "Désinstaller"
+      }
+    },
+    "nexusBrowse": {
+      "title": "Parcourir Nexus Mods",
+      "description": "Recherchez et filtrez les mods Palworld depuis Nexus Mods. Les super administrateurs avec Nexus Premium peuvent installer directement ; tout le monde peut toujours ouvrir Nexus et utiliser l'envoi de fichier vérifié."
+    },
+    "nexusBrowser": {
+      "allCategory": "Tous",
+      "loadErrorFallback": "Échec du chargement des mods depuis Nexus Mods.",
+      "needsApiKey": "L'installation directe nécessite une clé API Nexus Mods enregistrée dans Super Admin.",
+      "needsPremium": "L'installation directe nécessite un accès de téléchargement Nexus Premium.",
+      "installedTitle": "Mod installé",
+      "installedMessage": "{{name}} a été installé depuis Nexus Mods.",
+      "installFailedTitle": "Échec de l'installation Nexus",
+      "unknownError": "Erreur inconnue.",
+      "banner": "La navigation utilise uniquement les métadonnées de Nexus Mods. L'installation directe apparaît sur chaque carte et s'active lorsque Super Admin dispose d'une clé API Nexus Premium enregistrée ; Installer un fichier reste disponible pour les archives téléchargées.",
+      "lists": {
+        "trending": "Tendances",
+        "latestAdded": "Derniers ajouts",
+        "latestUpdated": "Dernières mises à jour"
+      },
+      "filterPlaceholder": "Filtrer les résultats chargés par nom, auteur ou résumé...",
+      "loading": "Récupération depuis Nexus Mods...",
+      "empty": "Aucun mod trouvé."
+    },
+    "nexusCard": {
+      "byAuthor": "par {{author}}",
+      "viewOnNexus": "Voir sur Nexus",
+      "installed": "Installé",
+      "directInstallTooltip": "Télécharger directement depuis Nexus et installer dans le dossier Mods du serveur actif.",
+      "needsPremiumKey": "L'installation directe nécessite une clé API Nexus Premium enregistrée.",
+      "installing": "Installation...",
+      "directInstall": "Installation directe",
+      "installFileTooltip": "Téléchargez d'abord ce fichier sur Nexus, puis envoyez-le dans Super Admin.",
+      "installFile": "Installer un fichier",
+      "superAdminOnlyTooltip": "Seul le super administrateur peut installer des fichiers de mods téléchargés.",
+      "superAdminOnly": "Super administrateur uniquement",
+      "hintDirect": "L'installation directe utilise votre clé Nexus enregistrée et votre accès de téléchargement Premium.",
+      "hintFileAvailable": "Vous pouvez toujours utiliser Installer un fichier après le téléchargement.",
+      "hintViewThenAsk": "« Voir sur Nexus » ouvre la page de téléchargement. Une fois téléchargé, demandez au super administrateur d'utiliser Installer depuis un fichier."
+    },
+    "installFromFile": {
+      "verifyErrorFallback": "Impossible de vérifier ce fichier.",
+      "installedTitle": "Mod installé",
+      "installedMessage": "{{name}} a été lié à votre serveur.",
+      "installErrorFallback": "Impossible d'installer ce fichier.",
+      "title": "Installer depuis un fichier téléchargé",
+      "description": "Pour les mods que vous avez vous-même téléchargés depuis Nexus. Envoyez le fichier .zip déjà téléchargé ; il est vérifié par rapport aux propres registres de Nexus via son hash de fichier exact avant toute installation. Les fichiers ne correspondant pas à un mod Palworld réel et publié sont rejetés.",
+      "uploading": "Envoi et vérification auprès de Nexus...",
+      "fileHint": "Seules les archives .zip sont prises en charge, jusqu'à 500 Mo. Le hash du fichier doit correspondre exactement à un fichier réellement hébergé par Nexus pour ce jeu.",
+      "verified": "Vérifié auprès de Nexus Mods",
+      "byAuthorVersion": "par {{author}} · v{{version}}",
+      "sizeAndConfirm": "{{size}}. Installer ce mod ?",
+      "cancel": "Annuler",
+      "installing": "Installation...",
+      "installNamed": "Installer « {{name}} »"
+    },
+    "filePicker": {
+      "title": "Choisir un fichier",
+      "description": "« {{name}} » possède plusieurs fichiers sur Nexus Mods. Choisissez lequel installer.",
+      "loading": "Chargement de la liste des fichiers depuis Nexus Mods...",
+      "loadErrorFallback": "Impossible de charger les fichiers de ce mod depuis Nexus.",
+      "cancel": "Annuler",
+      "install": "Installer le fichier sélectionné",
+      "installing": "Installation..."
+    }
+  },
+  "serverControl": {
+    "change": "Changer",
+    "nameAndPort": "{{name}} · port {{port}}",
+    "working": "En cours...",
+    "startServer": "Démarrer le serveur",
+    "noServerSelected": "Aucun serveur sélectionné",
+    "states": {
+      "online": "En ligne",
+      "offline": "Hors ligne",
+      "starting": "Démarrage",
+      "stopping": "Arrêt",
+      "restarting": "Redémarrage",
+      "unknown": "Inconnu"
+    },
+    "realmAlive": "Le royaume est vivant et se porte bien.",
+    "realmShifting": "Le royaume change d'état...",
+    "realmSlumbers": "Le royaume sommeille.",
+    "shuttingDownIn": "Arrêt dans {{seconds}}s",
+    "cancel": "Annuler",
+    "ritesTitle": "Rites de commandement",
+    "stopServer": "Arrêter le serveur",
+    "restartServer": "Redémarrer le serveur",
+    "saveWorld": "Sauvegarder le monde",
+    "checkUpdates": "Vérifier les mises à jour",
+    "broadcastMessage": "Diffuser un message",
+    "shutdownCountdown": "Compte à rebours d'arrêt",
+    "serverUpdateTitle": "Mise à jour du serveur",
+    "statusLabel": "Statut : {{status}}",
+    "jobStatus": {
+      "running": "en cours",
+      "done": "terminé",
+      "error": "erreur"
+    },
+    "installedBuildShort": "Build installé {{id}}",
+    "latestBuildShort": "Dernier build {{id}}",
+    "stopDialog": {
+      "title": "Arrêter le serveur ?",
+      "description": "Tous les joueurs connectés seront déconnectés immédiatement. Ceci ne peut plus être annulé à distance une fois hors ligne."
+    },
+    "restartDialog": {
+      "title": "Redémarrer le serveur ?",
+      "description": "Le serveur passera brièvement hors ligne pendant le redémarrage. Les joueurs connectés seront déconnectés."
+    },
+    "updateDialog": {
+      "title": "Mettre à jour les fichiers du serveur ?",
+      "stoppedRequired": "Une mise à jour est disponible, mais le serveur doit être arrêté avant qu'AutoPalExpress puisse mettre à jour ses fichiers.",
+      "availableWithBuild": "Steam signale une nouvelle version du serveur dédié Palworld ({{buildId}}). Mettre à jour le serveur actif maintenant ?",
+      "available": "Steam signale une nouvelle version du serveur dédié Palworld. Mettre à jour le serveur actif maintenant ?"
+    },
+    "updateServer": "Mettre à jour le serveur",
+    "broadcastDialog": {
+      "title": "Diffuser un message",
+      "description": "Envoyé instantanément à tous les joueurs actuellement dans le royaume.",
+      "placeholder": "Tapez votre annonce...",
+      "sending": "Envoi...",
+      "send": "Diffuser"
+    },
+    "shutdownDialog": {
+      "title": "Démarrer le compte à rebours d'arrêt",
+      "description": "Choisissez combien de temps avant l'arrêt du serveur. Les joueurs resteront connectés jusqu'à la fin du compte à rebours.",
+      "begin": "Démarrer le compte à rebours"
+    },
+    "notifications": {
+      "wentDarkTitle": "Le serveur s'est éteint",
+      "wentDarkMessage": "Le compte à rebours d'arrêt a atteint zéro.",
+      "serverUpdatedTitle": "Serveur mis à jour",
+      "installedBuild": "Build {{id}} installé.",
+      "updateFinished": "SteamCMD a terminé la mise à jour.",
+      "updateFailedTitle": "Échec de la mise à jour",
+      "updateFailedFallback": "SteamCMD n'a pas pu mettre à jour le serveur.",
+      "updateStatusFailedTitle": "Échec du statut de mise à jour",
+      "unknownError": "Erreur inconnue.",
+      "ignitedTitle": "Serveur allumé",
+      "ignitedMessage": "Le royaume s'éveille à nouveau.",
+      "extinguishedTitle": "Serveur éteint",
+      "extinguishedMessage": "Le royaume s'est tu.",
+      "restartedTitle": "Serveur redémarré",
+      "restartedMessage": "Le royaume a été reforgé.",
+      "savedTitle": "Monde sauvegardé",
+      "savedMessage": "Le destin de votre royaume a été gravé dans la pierre.",
+      "upToDateTitle": "Le serveur est à jour",
+      "couldNotCompareTitle": "Impossible de comparer les builds",
+      "couldNotCompareMessage": "SteamCMD a répondu, mais l'ID du build installé ou le plus récent n'était pas disponible.",
+      "stopFirstTitle": "Arrêtez d'abord le serveur",
+      "stopFirstMessage": "Les mises à jour ne peuvent être exécutées que lorsque le serveur est hors ligne.",
+      "startingUpdateLog": "Démarrage de la mise à jour SteamCMD...",
+      "updateStartedTitle": "Mise à jour démarrée",
+      "updateStartedMessage": "SteamCMD met à jour le serveur arrêté.",
+      "couldNotStartUpdateTitle": "Impossible de démarrer la mise à jour",
+      "broadcastTitle": "Message diffusé",
+      "broadcastMessage": "Vos mots résonnent à travers le royaume.",
+      "countdownStartedTitle": "Compte à rebours d'arrêt démarré",
+      "countdownStartedMessage": "Le serveur se taira dans {{seconds}}s.",
+      "countdownCancelledTitle": "Compte à rebours annulé",
+      "countdownCancelledMessage": "Le destin du royaume a été épargné, pour l'instant."
+    }
+  },
+  "launcherOptions": {
+    "savedTitle": "Options de lancement enregistrées",
+    "savedMessage": "Redémarrez le serveur pour que ces options de lancement prennent effet.",
+    "unavailable": "Indisponible",
+    "loading": "Chargement des options de lancement...",
+    "selectServer": "Sélectionnez un serveur pour modifier les options de lancement.",
+    "title": "Options de lancement",
+    "publicLobby": "Affiche le serveur dans la liste des serveurs communautaires de Palworld.",
+    "perfThreads": "Active le mode de lancement à threads de performance de Palworld.",
+    "noAsyncLoadingThread": "Désactive le thread de chargement asynchrone séparé de Palworld.",
+    "multithreadForDs": "Utilise l'indicateur de multithreading pour serveur dédié de Palworld.",
+    "publicIpDescription": "Annonce l'IP publique détectée par Super Admin.",
+    "superAdminPublicIp": "IP publique de Super Admin",
+    "publicPortDescription": "Annonce le port de jeu depuis Super Admin.",
+    "superAdminGamePort": "Port de jeu de Super Admin",
+    "applyNote": "Ces options s'appliquent à {{name}} au prochain démarrage. Les valeurs d'IP publique et de port sont lues depuis Super Admin et ne peuvent pas être modifiées ici.",
+    "queryPortDescription": "Port du protocole de liste/requête de serveurs Steam, distinct du port de jeu. Ne compte que si vous exécutez plusieurs serveurs Palworld sur cette machine - donnez à chacun sa propre valeur pour éviter les conflits.",
+    "queryPortSavedTitle": "Port de requête Steam enregistré",
+    "queryPortSavedMessage": "Redémarrez le serveur pour que cela prenne effet.",
+    "queryPortSaving": "Enregistrement...",
+    "queryPortSave": "Enregistrer le port de requête"
+  },
+  "logs": {
+    "exportedTitle": "Journaux exportés",
+    "exportedMessage": "La chronique a été copiée sur un parchemin.",
+    "title": "La Chronique",
+    "export": "Exporter",
+    "searchPlaceholder": "Rechercher dans les journaux...",
+    "levels": {
+      "all": "Tous",
+      "info": "Info",
+      "warning": "Avertissements",
+      "error": "Erreurs",
+      "debug": "Débogage"
+    },
+    "autoRefresh": "Actualisation automatique",
+    "linesCount": "{{count}} lignes",
+    "entriesCount": "{{count}} entrées",
+    "loading": "Déroulement du parchemin...",
+    "noAppOutput": "Aucune sortie AutoPalExpress pour l'instant.",
+    "ipsHiddenHint": "Les adresses IP de cette sortie sont masquées - seul le super administrateur peut les voir.",
+    "serverActivity": "Activité du serveur",
+    "noActivityMatch": "Aucune activité de serveur ne correspond à votre recherche."
+  },
+  "settings": {
+    "startup": {
+      "savedTitle": "Récupération au démarrage enregistrée",
+      "savedMessage": "AutoPalExpress utilisera ces options au prochain démarrage de Windows ou de l'application.",
+      "failedTitle": "Échec de la récupération au démarrage",
+      "unknownError": "Erreur inconnue.",
+      "title": "Démarrage Windows",
+      "loading": "Lecture des paramètres de récupération au démarrage...",
+      "bootWithWindows": "Démarrer AutoPalExpress avec Windows",
+      "bootWithWindowsDescription": "Ouvre automatiquement l'outil d'administration lorsque cet utilisateur Windows se connecte.",
+      "autoStartServer": "Redémarrer le serveur actif à l'ouverture d'AutoPalExpress",
+      "autoStartServerDescription": "Utile après une mise à jour Windows ou une coupure de courant : au redémarrage de la machine, l'application peut remettre en ligne le serveur sélectionné.",
+      "saving": "Enregistrement...",
+      "save": "Enregistrer la récupération au démarrage"
+    },
+    "users": {
+      "inviteCreatedTitle": "Invitation créée",
+      "inviteCreatedMessage": "Partagez le code avec votre ami.",
+      "accessRevokedTitle": "Accès révoqué",
+      "accessRevokedMessage": "{{name}} ne peut plus se connecter.",
+      "title": "Utilisateurs et accès",
+      "description": "Vous êtes le super administrateur : le seul à pouvoir accorder ou révoquer l'accès. Les amis utilisent un code d'invitation une fois pour créer leur propre compte administrateur.",
+      "revoke": "Révoquer",
+      "inviteCodes": "Codes d'invitation",
+      "creating": "Création...",
+      "newInvite": "Nouvelle invitation",
+      "noInvites": "Aucun code d'invitation inutilisé.",
+      "copied": "Copié",
+      "copy": "Copier",
+      "revokeDialog": {
+        "title": "Révoquer l'accès de cet administrateur ?",
+        "description": "{{name}} sera déconnecté immédiatement et ne pourra plus se reconnecter.",
+        "confirm": "Révoquer l'accès"
+      }
+    },
+    "instances": {
+      "switchedTitle": "Serveur changé",
+      "browsingTitle": "Parcourir les fichiers du serveur",
+      "openFolderFailedTitle": "Impossible d'ouvrir le dossier",
+      "unknownError": "Erreur inconnue.",
+      "deletedTitle": "Serveur supprimé",
+      "deletedMessage": "{{name}} a été retiré de cet outil et son dossier serveur a été supprimé.",
+      "unregisteredTitle": "Serveur désenregistré",
+      "unregisteredMessage": "{{name}} a été retiré de cet outil. Ses fichiers n'ont pas été touchés.",
+      "removeFailedTitle": "Impossible de supprimer le serveur",
+      "title": "Instances de serveur",
+      "importExisting": "Importer un existant",
+      "deployNew": "Déployer un nouveau serveur",
+      "empty": "Aucun serveur pour l'instant. Déployez un nouveau serveur Palworld isolé ou importez-en un déjà installé.",
+      "source": {
+        "deployed": "Déployé",
+        "steam": "Bibliothèque Steam",
+        "manual": "Importé"
+      },
+      "active": "Actif",
+      "foundOnDisk": "Trouvé sur le disque",
+      "notFoundOnDisk": "Introuvable sur le disque",
+      "port": "Port {{port}}",
+      "ue4ssVersion": "UE4SS {{version}}",
+      "ue4ssNotInstalled": "UE4SS non installé",
+      "opening": "Ouverture...",
+      "browseFiles": "Parcourir les fichiers",
+      "switching": "Changement...",
+      "switchTo": "Basculer sur",
+      "remove": "Supprimer",
+      "removeAndDelete": "Supprimer et effacer",
+      "removeDeleteDialog": {
+        "title": "Supprimer et effacer ce serveur ?",
+        "description": "{{name}} sera désenregistré de cet outil et son dossier serveur sera supprimé du disque, y compris les mods et les sauvegardes du monde. Arrêtez d'abord le serveur."
+      },
+      "removeDialog": {
+        "title": "Supprimer ce serveur ?",
+        "description": "{{name}} sera désenregistré de cet outil. Ses fichiers réels, mods et sauvegardes du monde restent intacts sur le disque."
+      }
+    },
+    "automation": {
+      "frequency": "Fréquence",
+      "daily": "Quotidien",
+      "weekly": "Hebdomadaire",
+      "day": "Jour",
+      "hour": "Heure",
+      "days": {
+        "monday": "Lundi",
+        "tuesday": "Mardi",
+        "wednesday": "Mercredi",
+        "thursday": "Jeudi",
+        "friday": "Vendredi",
+        "saturday": "Samedi",
+        "sunday": "Dimanche"
+      },
+      "updatedTitle": "Automatisation mise à jour",
+      "updatedMessage": "Vos plannings ont été inscrits.",
+      "backupCompleteTitle": "Sauvegarde terminée",
+      "backupCompleteMessage": "Les données de sauvegarde du royaume ont été préservées.",
+      "backupFailedTitle": "Échec de la sauvegarde",
+      "unknownError": "Erreur inconnue.",
+      "yes": "Oui",
+      "no": "Non",
+      "when": "Quand",
+      "size": "Taille",
+      "freshSave": "Sauvegarde fraîche",
+      "title": "Automatisation",
+      "loading": "Lecture de l'ancien grimoire...",
+      "restApiNeeded": "Les avertissements de redémarrage, les sauvegardes fraîches et les messages d'arrivée/départ des joueurs nécessitent l'API REST de Palworld.",
+      "enableRestApi": "Activer l'API REST dans Super Admin",
+      "scheduledBackups": "Sauvegardes programmées",
+      "scheduledBackupsDescription": "Archiver automatiquement les sauvegardes du monde",
+      "scheduledRestarts": "Redémarrages programmés",
+      "scheduledRestartsDescription": "Redémarrer automatiquement selon un planning",
+      "warnPlayers": "Avertir les joueurs (minutes avant)",
+      "warnPlayersHint": "0 = pas de diffusion d'avertissement.",
+      "announceJoinLeave": "Annoncer les arrivées et départs",
+      "announceJoinLeaveDescription": "Diffuser un message quand un joueur entre ou quitte le royaume",
+      "inscribing": "Inscription...",
+      "save": "Enregistrer l'automatisation",
+      "recentBackups": "Sauvegardes récentes",
+      "preserving": "Préservation...",
+      "backupNow": "Sauvegarder maintenant",
+      "noBackups": "Aucune sauvegarde pour l'instant."
+    },
+    "deploy": {
+      "deployedTitle": "Serveur déployé",
+      "deployedMessage": "{{name}} est prêt.",
+      "startFailedFallback": "Impossible de démarrer le déploiement.",
+      "folderPickerFailedFallback": "Impossible d'ouvrir le sélecteur de dossier.",
+      "title": "Déployer un nouveau serveur",
+      "description": "Installe un serveur dédié Palworld neuf et totalement isolé via SteamCMD - avec son propre dossier, ses mods et ses ports, afin qu'il ne puisse entrer en conflit avec aucun autre serveur géré par cet outil.",
+      "serverName": "Nom du serveur",
+      "serverNamePlaceholder": "Mon Palworld douillet",
+      "gamePort": "Port de jeu",
+      "restApiPort": "Port de l'API REST",
+      "maxPlayers": "Nombre max. de joueurs",
+      "installLocation": "Emplacement d'installation",
+      "defaultFolder": "Dossier de serveurs AutoPalExpress par défaut",
+      "default": "Par défaut",
+      "browse": "Parcourir",
+      "hint": "AutoPalExpress crée un dossier serveur nommé d'après ce serveur dans l'emplacement sélectionné. Chaque serveur a besoin de ses propres ports Jeu/API REST si vous prévoyez d'en exécuter plusieurs simultanément. Ceci télécharge le serveur directement depuis Steam, ce qui peut prendre du temps.",
+      "deploying": "Déploiement...",
+      "done": "Terminé - le nouveau serveur est maintenant actif.",
+      "cancel": "Annuler",
+      "deploy": "Déployer",
+      "close": "Fermer"
+    },
+    "import": {
+      "importedTitle": "Serveur importé",
+      "detectedMessage": "Trouvé et enregistré via votre bibliothèque Steam.",
+      "detectFailedFallback": "Aucun serveur Palworld trouvé dans une bibliothèque Steam.",
+      "importFailedFallback": "Impossible d'importer ce dossier.",
+      "title": "Importer un serveur existant",
+      "description": "Enregistrez un serveur dédié Palworld que vous avez déjà installé.",
+      "scanning": "Analyse des bibliothèques Steam...",
+      "autoDetect": "Détection automatique via Steam",
+      "orManually": "ou saisir manuellement",
+      "serverName": "Nom du serveur",
+      "serverNamePlaceholder": "Mon serveur Palworld",
+      "installFolder": "Dossier d'installation",
+      "browse": "Parcourir",
+      "cancel": "Annuler",
+      "importing": "Importation...",
+      "import": "Importer"
+    }
+  },
+  "localApi": {
+    "helpInt": "Paramètre numérique. Exemple : 10 est bas, 30 est modéré, 60+ est élevé.",
+    "helpFloat": "Multiplicateur décimal. Exemple : 0,5 est la moitié, 1,0 est normal, 2,0 est le double.",
+    "helpString": "Écrit directement dans PalWorldSettings.ini.",
+    "savedTitle": "API locale enregistrée",
+    "savedMessage": "Redémarrez le serveur pour que les modifications au démarrage prennent effet.",
+    "saveFailedTitle": "Impossible d'enregistrer l'API locale",
+    "unknownError": "Erreur inconnue.",
+    "title": "API locale",
+    "saving": "Enregistrement...",
+    "save": "Enregistrer",
+    "description": "Les paramètres REST/API de Palworld sont conservés ici car ils contrôlent la façon dont AutoPalExpress communique avec le serveur local. Ne redirigez pas directement cette API.",
+    "empty": "Aucun champ d'API locale n'est présent dans le PalWorldSettings.ini actuel de ce serveur."
+  },
+  "superAdmin": {
+    "intro": "Tout ce qui se trouve ici modifie l'exposition réseau de cette machine, qui peut l'atteindre, ou à quels comptes externes elle est connectée, et est réservé au super administrateur, comme la gestion des comptes.",
+    "activeServer": "Serveur actif",
+    "modFileUploads": "Envois de fichiers de mods",
+    "modFileUploadsDescription": "Installez un mod à partir d'un fichier que vous avez déjà téléchargé depuis Nexus. Les fichiers envoyés sont placés sur le disque de cette machine, c'est pourquoi cela reste réservé au super administrateur plutôt qu'à tout administrateur invité - la vérification par hash exact par rapport au catalogue de Nexus (voir la boîte de dialogue) est ce qui rend cela sûr.",
+    "installFromFileButton": "Installer depuis un fichier",
+    "portForward": {
+      "portUpdatedTitle": "Port de jeu mis à jour",
+      "portUpdatedMessage": "Prend effet au prochain démarrage du serveur.",
+      "saveFailedTitle": "Échec de l'enregistrement",
+      "unknownError": "Erreur inconnue.",
+      "firewallAddedTitle": "Règle de pare-feu ajoutée",
+      "firewallAddedMessage": "Windows autorisera désormais les connexions entrantes sur le port UDP {{port}}.",
+      "firewallFailedTitle": "Impossible d'ajouter la règle de pare-feu",
+      "forwardedTitle": "Port redirigé",
+      "forwardedMessage": "Les amis peuvent se connecter sur le port {{port}}.",
+      "forwardFailedTitle": "Échec de la redirection du port",
+      "forwardFailedFallback": "Impossible de rediriger le port.",
+      "removedTitle": "Redirection de port supprimée",
+      "removedMessage": "Les amis ne peuvent plus se connecter depuis l'extérieur de votre réseau.",
+      "removeFailedFallback": "Impossible de supprimer la redirection de port.",
+      "failedTitle": "Échec",
+      "title": "Partager avec des amis",
+      "noInstance": "Configurez d'abord un serveur pour le partager avec des amis.",
+      "lookingUp": "Recherche de votre adresse publique...",
+      "gamePort": "Port de jeu",
+      "gamePortHint": "C'est le port réellement configuré de votre serveur - le seul endroit pour le modifier. Prend effet au prochain démarrage du serveur.",
+      "saving": "Enregistrement...",
+      "savePort": "Enregistrer le port",
+      "yourAddress": "Votre adresse",
+      "copied": "Copié",
+      "copy": "Copier",
+      "noPublicAddress": "Impossible de déterminer votre adresse publique.",
+      "shareHint": "Partagez ceci avec vos amis ; cela ne fonctionne qu'une fois les deux étapes ci-dessous terminées.",
+      "step1": "1. Pare-feu Windows",
+      "firewallAllowed": "Autorisé : les connexions UDP entrantes sur le port {{port}} ne sont pas bloquées.",
+      "checking": "Vérification...",
+      "firewallNotAllowed": "Pas encore autorisé. Les amis peuvent voir un délai d'attente, pas une erreur.",
+      "waitingForPermission": "En attente d'autorisation...",
+      "allowThroughFirewall": "Autoriser via le pare-feu",
+      "checkAgain": "Vérifier à nouveau",
+      "uacHint": "Windows affichera sa propre invite d'autorisation ; cliquez sur \"Oui\" pour continuer.",
+      "step2": "2. Redirection de port du routeur",
+      "noUpnpRouter": "Aucun routeur compatible UPnP trouvé sur ce réseau.",
+      "noUpnpHint": "La redirection de port automatique n'est pas disponible ici. Votre routeur a peut-être UPnP désactivé, ou votre connexion peut être derrière un NAT de niveau opérateur (courant chez certains FAI), ce qu'aucun outil local ne peut contourner. Redirigez-le manuellement dans la page d'administration de votre routeur à la place :",
+      "palworldServerName": "Serveur Palworld",
+      "forwardedVia": "Le port {{port}} est redirigé via {{router}}.",
+      "forwardedElsewhere": "Le port {{port}} est actuellement redirigé vers une autre machine sur ce réseau ({{client}}), pas ce PC.",
+      "noMappingDetected": "Aucune redirection actuellement détectée pour ce port - certains routeurs ne le signalent pas de manière fiable, donc « Supprimer » est toujours disponible ci-dessous au cas où une redirection existerait quand même.",
+      "forwarding": "Redirection...",
+      "forwardPort": "Rediriger le port",
+      "removing": "Suppression...",
+      "removeThisForward": "Supprimer cette redirection",
+      "queryPort": "Port de requête Steam",
+      "queryPortHint": "Utilisé uniquement pour le protocole de liste/requête de serveurs Steam, distinct du port de jeu ci-dessus. Si vous exécutez plusieurs serveurs Palworld sur cette machine, donnez à chacun sa propre valeur ici pour éviter les conflits. Prend effet au prochain démarrage du serveur.",
+      "saveQueryPort": "Enregistrer le port de requête",
+      "queryPortUpdatedTitle": "Port de requête Steam mis à jour",
+      "queryPortUpdatedMessage": "Prend effet au prochain démarrage du serveur.",
+      "firewallAddedMessageBoth": "Windows autorisera désormais les connexions entrantes sur les ports UDP {{port}} et {{queryPort}}.",
+      "forwardedMessageBoth": "Les amis peuvent se connecter sur le port {{port}}, et ce serveur s'affichera correctement dans la liste des serveurs Steam via le port {{queryPort}}.",
+      "queryPortManualHint": "Votre port de requête Steam est différent de votre port de jeu, il a donc besoin de sa propre règle :",
+      "steamQueryPortName": "Serveur Palworld (requête Steam)",
+      "queryPortReadOnlyHint": "Défini dans Options de lancement - affiché ici pour que vous sachiez quoi ouvrir aussi ci-dessous lorsqu'il diffère du port de jeu."
+    },
+    "manualForward": {
+      "intro": "Ajoutez une nouvelle règle de redirection de port dans la page d'administration de votre routeur avec ces valeurs exactes :",
+      "name": "Nom",
+      "protocol": "Protocole",
+      "externalIp": "IP externe",
+      "internalIp": "IP interne",
+      "internalIpFallback": "IP locale de ce PC - vérifiez vos paramètres réseau",
+      "externalPort": "Port externe",
+      "internalPort": "Port interne"
+    },
+    "remoteAccess": {
+      "firewallAddedTitle": "Règle de pare-feu ajoutée",
+      "firewallAddedMessage": "Windows autorisera désormais les connexions entrantes vers le panneau d'administration.",
+      "firewallFailedTitle": "Impossible d'ajouter la règle de pare-feu",
+      "unknownError": "Erreur inconnue.",
+      "forwardedTitle": "Panneau d'administration redirigé",
+      "forwardedMessage": "Les amis peuvent désormais accéder à la page de connexion depuis l'extérieur.",
+      "forwardFailedTitle": "Échec de la redirection",
+      "closedTitle": "Accès à distance fermé",
+      "removeFailedTitle": "Échec de la suppression",
+      "title": "Accès à distance",
+      "description": "Ouvrez ce panneau d'administration sur Internet afin que les amis disposant d'un compte puissent se connecter depuis l'extérieur de votre réseau. Ceci est distinct du partage du serveur de jeu lui-même, et nécessite deux choses : Windows doit autoriser la connexion, puis votre routeur doit la rediriger ici.",
+      "firewallAllowed": "Autorisé : les connexions entrantes sur le port {{port}} ne sont pas bloquées.",
+      "firewallNotAllowed": "Pas encore autorisé. C'est la raison la plus courante pour laquelle les amis ne peuvent pas se connecter (ressemble à un délai d'attente, pas à une erreur).",
+      "noUpnpHint": "Aucun routeur compatible UPnP trouvé, donc cela ne peut pas être ouvert automatiquement. Redirigez-le manuellement dans la page d'administration de votre routeur à la place :",
+      "adminPanelName": "Panneau d'administration du serveur Palworld",
+      "openVia": "L'accès à distance est ouvert via {{router}}.",
+      "opening": "Ouverture...",
+      "openRemoteAccess": "Ouvrir l'accès à distance",
+      "closing": "Fermeture...",
+      "httpWarning": "Ceci envoie les identifiants de connexion en HTTP simple, pas HTTPS. Sans problème sur un réseau domestique de confiance, mais quiconque entre votre ami et votre routeur (par ex. sur un wifi public) pourrait théoriquement les intercepter. Pour une confidentialité renforcée, envisagez un outil de réseau privé comme Tailscale plutôt que d'exposer directement ce port."
+    },
+    "nexus": {
+      "keyRemovedTitle": "Clé Nexus Mods supprimée",
+      "keyRemovedMessage": "La navigation fonctionne toujours, mais les installations directes nécessitent une clé Premium enregistrée.",
+      "keySavedTitle": "Clé Nexus Mods enregistrée",
+      "directInstallsAvailable": "Les installations directes Nexus sont disponibles.",
+      "needsPremium": "La navigation fonctionne, mais les installations directes nécessitent Nexus Premium.",
+      "keyFailedTitle": "Échec de la clé Nexus",
+      "unknownError": "Erreur inconnue.",
+      "title": "Intégration Nexus Mods",
+      "description1": "Parcourir Nexus Mods utilise désormais les métadonnées GraphQL publiques de Nexus, le serveur n'a donc plus besoin de la clé API personnelle du super administrateur pour la navigation ou les installations manuelles vérifiées.",
+      "description2": "Les installations directes Nexus utilisent la clé API enregistrée et nécessitent un accès de téléchargement Nexus Premium. Sans cela, téléchargez les fichiers sur Nexus et utilisez « Installer depuis un fichier » ici afin que le fichier exact puisse être vérifié avant l'installation.",
+      "premiumMember": "Membre Premium",
+      "freeMember": "Membre gratuit",
+      "idLabel": "ID {{id}}",
+      "removeSavedKey": "Supprimer la clé enregistrée",
+      "worksWithoutKey": "La navigation et l'envoi de fichiers vérifiés fonctionnent sans clé API Nexus.",
+      "apiKeyPlaceholder": "Clé API Nexus Mods pour les installations directes",
+      "checking": "Vérification...",
+      "saveKey": "Enregistrer la clé"
+    },
+    "diagnostics": {
+      "title": "Diagnostic",
+      "run": "Lancer le diagnostic",
+      "running": "Exécution...",
+      "description": "Vérifie la configuration du serveur actif, les fichiers Palworld, le port de jeu local, les règles du pare-feu Windows et l'accès à l'API REST, puis écrit un rapport de support sur le disque. Windows demandera une autorisation (invite UAC) car la vérification des règles de pare-feu nécessite des droits administrateur - cliquez sur « Oui » pour continuer.",
+      "waitingForPermission": "En attente de l'invite d'autorisation Windows...",
+      "completeTitle": "Diagnostic terminé",
+      "completeMessage": "Voir le rapport ci-dessous.",
+      "failedTitle": "Impossible d'exécuter le diagnostic",
+      "unknownError": "Erreur inconnue.",
+      "savedTo": "Enregistré dans {{path}}"
+    }
+  }
+}

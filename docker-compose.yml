@@ -1,0 +1,38 @@
+services:
+  autopalexpress:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: autopalexpress:latest
+    restart: unless-stopped
+    init: true
+    environment:
+      AUTOPAL_DATA_DIR: /data
+      TZ: ${TZ:-UTC}
+    ports:
+      - "${AUTOPAL_PORT:-8000}:8000/tcp"
+      # Palworld's default game port. Change PALWORLD_GAME_PORT when the
+      # active instance uses a different port.
+      - "${PALWORLD_GAME_PORT:-8211}:${PALWORLD_GAME_PORT:-8211}/udp"
+      # Optional Steam query port. Keep this equal to the instance queryPort
+      # only when Steam Query Port is enabled in Launcher Options.
+      - "${PALWORLD_QUERY_PORT:-8212}:${PALWORLD_QUERY_PORT:-8212}/udp"
+    volumes:
+      # Application accounts, settings, logs, mods, backups, and deployed
+      # server files live here. Use a bind mount in Portainer if you want the
+      # files visible on the host, or replace this with a named volume.
+      - "${AUTOPAL_DATA_PATH:-./data}:/data"
+      # Existing Linux Palworld installs can be imported from /servers.
+      - "${AUTOPAL_SERVERS_PATH:-./servers}:/servers"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - >-
+          import urllib.request;
+          urllib.request.urlopen('http://127.0.0.1:8000/api/auth/status', timeout=4)
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
