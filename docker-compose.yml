@@ -6,6 +6,12 @@ services:
     image: autopalexpress:latest
     restart: unless-stopped
     init: true
+    # Unreal Engine uses shared memory during Palworld server startup.
+    shm_size: "1gb"
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
     environment:
       AUTOPAL_DATA_DIR: /data
       TZ: ${TZ:-UTC}

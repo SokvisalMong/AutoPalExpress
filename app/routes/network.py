@@ -179,7 +179,7 @@ async def upnp_unforward_admin() -> dict[str, Any]:
 @router.get("/firewall/status")
 async def firewall_status() -> dict[str, Any]:
     exists = await asyncio.to_thread(firewall.rule_exists, ADMIN_FIREWALL_RULE_NAME)
-    return {"ruleExists": exists}
+    return {"ruleExists": exists, "supported": firewall.is_supported()}
 
 
 @router.post("/firewall/allow-admin-port")
@@ -198,7 +198,7 @@ async def firewall_allow_admin_port() -> dict[str, Any]:
 async def firewall_game_status(port: int, protocol: str = "UDP") -> dict[str, Any]:
     rule_name = _game_firewall_rule_name(port, protocol)
     exists = await asyncio.to_thread(firewall.rule_exists, rule_name)
-    return {"ruleExists": exists, "port": port, "protocol": protocol}
+    return {"ruleExists": exists, "supported": firewall.is_supported(), "port": port, "protocol": protocol}
 
 
 class AllowGamePortRequest(BaseModel):

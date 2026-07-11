@@ -46,6 +46,8 @@ The default mounts are:
 
 These directories must remain in place when the container is updated. They contain the state that should survive image rebuilds.
 
+The image runs as a non-root `autopal` user. This is required by Palworld's Linux server, which refuses to start as root. New host directories created by the deploying user normally work automatically; existing server trees copied from a root-owned location must be made readable and writable before import.
+
 If Docker reports a permission error, make the directories writable by the account that manages the deployment:
 
 ```bash
@@ -232,6 +234,8 @@ After the server is deployed or imported:
 
 The Palworld process runs inside the AutoPalExpress container. The Compose UDP mappings make the published game/query ports reachable through the Linux host.
 
+`127.0.0.1:8211` is a UDP game endpoint, not an HTTP page. Do not test it with a browser or `curl`; connect to it from the Palworld client. The REST API uses TCP `8212` inside the container and is intentionally not published to the host.
+
 ## 10. Update the deployment
 
 Back up persistent state before an update:
@@ -304,6 +308,25 @@ AUTOPAL_SERVERS_PATH=/srv/autopalexpress/servers
 ```
 
 When importing a mounted server through the application, still use its container path, such as `/servers/PalServer`.
+
+
+### Common Linux container symptoms
+
+If the log says `Refusing to run with the root privileges`, rebuild and recreate the latest image. Do not override the Compose service with `user: root`.
+
+If the Dashboard says metrics are unavailable, check that the Palworld REST API is listening inside the container:
+
+```bash
+docker compose exec autopalexpress sh -c 'cat /proc/net/tcp'
+```
+
+The REST listener appears as hexadecimal port `2014`, which is decimal `8212`. Check the application log for successful requests such as:
+
+```text
+GET http://127.0.0.1:8212/v1/api/metrics 200
+```
+
+The Linux deployment does not use the Windows Firewall integration. Configure the Linux host firewall with its normal system tool instead; the panel reports Windows Firewall as unsupported rather than trying to run `netsh`.
 
 ## Troubleshooting commands
 

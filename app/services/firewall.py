@@ -11,6 +11,7 @@ typing the netsh command by hand.
 
 import logging
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -23,7 +24,14 @@ class FirewallError(Exception):
         self.message = message
 
 
+def is_supported() -> bool:
+    return sys.platform == "win32"
+
+
+
 def rule_exists(rule_name: str) -> bool:
+    if not is_supported():
+        return False
     result = subprocess.run(
         ["netsh", "advfirewall", "firewall", "show", "rule", f"name={rule_name}"],
         capture_output=True,

@@ -4,6 +4,7 @@
 
 - **TICKET-0088:** Added a Linux/Portainer Docker Compose deployment. The multi-stage image builds the frontend, runs the FastAPI backend, persists `/data`, mounts optional `/servers`, publishes configurable admin/game/query ports, and includes a healthcheck. Linux Palworld executable, SteamCMD, and config-path handling are supported alongside the existing Windows paths.
 - **TICKET-0089:** Added `LINUX_DOCKER_DEPLOYMENT.md`, a complete Linux deployment runbook covering Docker Compose, Portainer, persistent storage, ports, first-run setup, Palworld server import/deployment, firewall/router configuration, updates, and troubleshooting.
+- **TICKET-0090:** Fixed Linux Palworld servers refusing to start in the container because the image ran as root. The image now runs as non-root `autopal`, configures shared memory/file-descriptor limits, supplies Linux Steam app identity variables, and reports the Windows Firewall integration as unsupported instead of returning Linux `netsh` errors. Verified game UDP 8211 binding, REST TCP 8212 binding, and successful REST metrics responses.
 
 ## 1.0.5 - 2026-07-11
 

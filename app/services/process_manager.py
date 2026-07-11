@@ -182,9 +182,19 @@ def start(instance: dict[str, Any]) -> None:
         if instance.get("jsonLogFormat"):
             launch_args.append("-logformat=json")
 
+        launch_env = None
+        if sys.platform != "win32":
+            launch_env = os.environ.copy()
+            # Steamworks expects the dedicated-server app identity in
+            # headless Linux containers; without it PalServer can remain
+            # blocked during startup before binding game or REST ports.
+            launch_env.setdefault("SteamAppId", "2394010")
+            launch_env.setdefault("SteamGameId", "2394010")
+
         proc = subprocess.Popen(
             launch_args,
             cwd=str(exe.parent),
+            env=launch_env,
             # Keep Palworld's own server window visible on Windows. Linux
             # containers have no desktop, so the process stays attached only
             # to its redirected standard streams.

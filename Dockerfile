@@ -27,7 +27,11 @@ COPY support/ ./support/
 COPY Palworld_Server.py ./
 COPY --from=frontend /src/web/dist ./web/dist
 
-RUN mkdir -p /data
+RUN useradd --create-home --shell /bin/bash autopal \
+    && mkdir -p /data \
+    && chown -R autopal:autopal /data
+
+USER autopal
 
 EXPOSE 8000
 
