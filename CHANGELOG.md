@@ -3,6 +3,7 @@
 ## Unreleased
 
 - **TICKET-0088:** Added a Linux/Portainer Docker Compose deployment. The multi-stage image builds the frontend, runs the FastAPI backend, persists `/data`, mounts optional `/servers`, publishes configurable admin/game/query ports, and includes a healthcheck. Linux Palworld executable, SteamCMD, and config-path handling are supported alongside the existing Windows paths.
+- **TICKET-0089:** Added `LINUX_DOCKER_DEPLOYMENT.md`, a complete Linux deployment runbook covering Docker Compose, Portainer, persistent storage, ports, first-run setup, Palworld server import/deployment, firewall/router configuration, updates, and troubleshooting.
 
 ## 1.0.5 - 2026-07-11
 

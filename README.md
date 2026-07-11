@@ -196,6 +196,8 @@ Outputs:
 
 The repository includes a production Docker image and a Compose stack for Linux hosts, including Portainer. The image builds the React frontend and runs the FastAPI backend on port `8000`; application state and deployed server files are kept outside the image so container updates do not erase them.
 
+For the complete Linux runbook, see [`LINUX_DOCKER_DEPLOYMENT.md`](LINUX_DOCKER_DEPLOYMENT.md), which covers installation, persistent storage, ports, firewall/router setup, server import/deployment, updates, troubleshooting, and Portainer.
+
 ### Docker Compose
 
 On a Linux host with Docker and Compose installed:

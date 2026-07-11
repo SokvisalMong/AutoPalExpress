@@ -102,6 +102,8 @@ All work before TICKET-0001 was done directly through conversation and recorded 
 
 * **TICKET-0088** (2026-07-11, Feature) - Added Linux/Portainer deployment with a multi-stage `Dockerfile`, `docker-compose.yml`, and `.dockerignore`. The stack builds the Vite frontend, serves FastAPI from one production container, persists `/data`, mounts optional `/servers`, publishes configurable admin/game/query ports, and health-checks `/api/auth/status`. Added `AUTOPAL_DATA_DIR` plus Linux Palworld executable, SteamCMD archive, config, process, and mods-path support. Verified Compose config, image build, healthy startup, API/HTML smoke tests, backend compilation, and Linux runtime helper values.
 
+* **TICKET-0089** (2026-07-11, Documentation) - Added `LINUX_DOCKER_DEPLOYMENT.md`, a complete distribution-neutral Linux runbook for Docker Compose and Portainer, including persistent storage, configurable ports, first-run setup, Palworld deployment/import, firewall/router guidance, updates, and troubleshooting. Linked it from the README and verified its paths and environment variables against the Compose file.
+
 ---
 
 Continue adding completed tickets in chronological order.
