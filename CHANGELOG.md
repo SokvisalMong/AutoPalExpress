@@ -6,6 +6,7 @@
 - **TICKET-0089:** Added `LINUX_DOCKER_DEPLOYMENT.md`, a complete Linux deployment runbook covering Docker Compose, Portainer, persistent storage, ports, first-run setup, Palworld server import/deployment, firewall/router configuration, updates, and troubleshooting.
 - **TICKET-0090:** Fixed Linux Palworld servers refusing to start in the container because the image ran as root. The image now runs as non-root `autopal`, configures shared memory/file-descriptor limits, supplies Linux Steam app identity variables, and reports the Windows Firewall integration as unsupported instead of returning Linux `netsh` errors. Verified game UDP 8211 binding, REST TCP 8212 binding, and successful REST metrics responses.
 - **TICKET-0091:** Dashboard server status and metrics now poll every second instead of every four seconds. Docker shared memory is configurable with `AUTOPAL_SHM_SIZE` (default `1gb`); this controls `/dev/shm`, not total container RAM, which remains uncapped.
+- **TICKET-0092:** Dashboard player roster now refreshes immediately and every second after each completed `/api/players` request, so players joining after the page loads become online without a manual refresh. Polling avoids overlapping requests and stops cleanly when leaving the Dashboard.
 
 ## 1.0.5 - 2026-07-11
 

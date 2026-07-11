@@ -56,6 +56,8 @@ web/
     hooks/           useAuth, useServerStatus, useNotifications
     types/models.ts  Shared TypeScript interfaces matching backend response shapes
 
+The Dashboard's `PlayersSection` fetches the complete persisted roster immediately and schedules the next `/api/players` request one second after the previous request settles. Recursive timeout scheduling avoids overlapping REST calls, and the effect cancels pending timers when the Dashboard unmounts.
+
 data/ (dev) or %LOCALAPPDATA%\PalworldServerAdmin\data (packaged)
   instances.json                     Registry of managed server instances, deduped by normalized server folder
   instances/<id>/*.json              Per-instance state (mods, automation config, backups/)

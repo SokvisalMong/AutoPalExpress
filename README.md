@@ -45,7 +45,7 @@ If you just want to host a Palworld server for friends, AutoPalExpress handles t
 - Browse Nexus Mods without entering a personal API key.
 - Install directly from Nexus when the super admin connects a Premium API key.
 - Enable, disable, reorder, and remove mods.
-- View players, kick players, and ban players through Palworld's REST API.
+- View players, kick players, and ban players through Palworld's REST API; the Dashboard roster refreshes automatically while it is open.
 - Monitor Dashboard CPU, RAM, players, uptime, and REST-backed server metrics.
 - Schedule backups and restarts.
 - Create invite codes so friends can help administer the server.

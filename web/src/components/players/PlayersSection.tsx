@@ -41,13 +41,39 @@ export function PlayersSection() {
   const unaffiliated = t("dashboard.roster.unaffiliated", { defaultValue: "Unaffiliated" });
 
   React.useEffect(() => {
-    playersApi
-      .getPlayers()
-      .then((p) => setPlayers(p))
-      .catch((e: Error) =>
-        notifications.error({ title: t("dashboard.roster.loadError", { defaultValue: "Couldn't load the roster" }), message: e.message })
-      )
-      .finally(() => setLoading(false));
+    let cancelled = false;
+    let timer: number | undefined;
+    let firstRequest = true;
+
+    async function pollRoster() {
+      try {
+        const nextPlayers = await playersApi.getPlayers();
+        if (cancelled) return;
+        setPlayers(nextPlayers);
+        setLoading(false);
+        firstRequest = false;
+      } catch (e) {
+        if (cancelled) return;
+        if (firstRequest) {
+          notifications.error({
+            title: t("dashboard.roster.loadError", { defaultValue: "Couldn't load the roster" }),
+            message: e instanceof Error ? e.message : String(e),
+          });
+        }
+        setLoading(false);
+        firstRequest = false;
+      } finally {
+        if (!cancelled) {
+          timer = window.setTimeout(pollRoster, 1000);
+        }
+      }
+    }
+
+    void pollRoster();
+    return () => {
+      cancelled = true;
+      if (timer !== undefined) window.clearTimeout(timer);
+    };
   }, [notifications, t]);
 
   const filtered = players.filter((p) => {

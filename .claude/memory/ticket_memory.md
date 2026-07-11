@@ -108,6 +108,8 @@ All work before TICKET-0001 was done directly through conversation and recorded 
 
 * **TICKET-0091** (2026-07-11, Enhancement) - Increased Dashboard server-status polling from 4 seconds to 1 second. Added configurable `AUTOPAL_SHM_SIZE` with a 1 GiB default and documented that it controls `/dev/shm`, not total RAM; the container has no general RAM cap. Deliberately did not expose Docker's socket through the web UI because that would grant root-equivalent host control; `.env`/Portainer configuration followed by stack recreation is the safe control.
 
+* **TICKET-0092** (2026-07-11, Bug) - Fixed the Dashboard roster only fetching once on mount. `PlayersSection` now polls `/api/players` immediately and once per second after each request completes, cancels in-flight scheduling on unmount, and keeps initial-load error behavior without repeating toast notifications for later transient failures. `npm run build` passed; `npm run lint` passed with five pre-existing warnings in unrelated files.
+
 ---
 
 Continue adding completed tickets in chronological order.
