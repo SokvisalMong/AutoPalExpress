@@ -233,9 +233,11 @@ The Compose bind mounts are:
 
 For a different host location, set `AUTOPAL_DATA_PATH` and `AUTOPAL_SERVERS_PATH` in a `.env` file or in the Portainer stack environment. Keep these directories writable by the container.
 
+The stack does not cap total container RAM; Palworld can use available host memory. `AUTOPAL_SHM_SIZE` controls only `/dev/shm` shared memory (default `1gb`), not total Palworld RAM. Set it in `.env` or Portainer and recreate the stack if Unreal Engine needs more shared memory.
+
 ### Portainer
 
-In Portainer, choose **Stacks → Add stack**, load this repository's `docker-compose.yml` from Git or paste its contents, then set the stack environment values (`AUTOPAL_PORT`, `PALWORLD_GAME_PORT`, `PALWORLD_QUERY_PORT`, `AUTOPAL_DATA_PATH`, and `AUTOPAL_SERVERS_PATH`) before deploying. Portainer builds the image from the included `Dockerfile`; subsequent updates are **Pull and redeploy** or a stack redeploy with image rebuild enabled.
+In Portainer, choose **Stacks → Add stack**, load this repository's `docker-compose.yml` from Git or paste its contents, then set the stack environment values (`AUTOPAL_PORT`, `PALWORLD_GAME_PORT`, `PALWORLD_QUERY_PORT`, `AUTOPAL_SHM_SIZE`, `AUTOPAL_DATA_PATH`, and `AUTOPAL_SERVERS_PATH`) before deploying. Portainer builds the image from the included `Dockerfile`; subsequent updates are **Pull and redeploy** or a stack redeploy with image rebuild enabled.
 
 The container can manage a Linux Palworld server installed through its in-app SteamCMD flow or imported from `/servers`. For a server installed outside the stack, mount its parent directory with `AUTOPAL_SERVERS_PATH` and import the container path, not the host path.
 

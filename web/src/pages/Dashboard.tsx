@@ -14,7 +14,7 @@ import { formatUptime, formatRelativeTime } from "@/lib/format";
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const { status, loading } = useServerStatus(4000);
+  const { status, loading } = useServerStatus(1000);
   const [modCount, setModCount] = React.useState<number | null>(null);
   const [instance, setInstance] = React.useState<ServerInstance | null>(null);
 

@@ -70,6 +70,7 @@ Create a `.env` file in the repository root when different ports are required:
 AUTOPAL_PORT=8000
 PALWORLD_GAME_PORT=8211
 PALWORLD_QUERY_PORT=8212
+AUTOPAL_SHM_SIZE=1gb
 TZ=UTC
 ```
 
@@ -88,6 +89,22 @@ mkdir -p /srv/autopalexpress/data /srv/autopalexpress/servers
 
 The Compose file publishes one game port and one query port. If multiple Palworld instances use different ports, add their UDP mappings to `docker-compose.yml` or use a host-networking design appropriate for your environment.
 
+
+### RAM versus shared memory
+
+The Compose stack does **not** set a general container RAM limit. On a normal Linux Docker host, Palworld can use the host's available memory, subject to the host's own memory, swap, and OOM behavior. `AUTOPAL_SHM_SIZE` controls only the container's `/dev/shm` shared-memory filesystem, which is used for Linux IPC and some Unreal Engine operations; it is not a 1 GiB RAM allocation or a cap on Palworld's total memory.
+
+Increase it only if the server or Unreal Engine reports shared-memory/IPC errors:
+
+```dotenv
+AUTOPAL_SHM_SIZE=2gb
+```
+
+Apply the change by recreating the stack:
+
+```bash
+docker compose up -d --force-recreate
+```
 Steam Query Port is disabled by default in AutoPalExpress. The UDP mapping is harmless while it is disabled, but it is only needed for gameplay/discovery after enabling the option in Launcher Options.
 
 ## 4. Build and start the stack

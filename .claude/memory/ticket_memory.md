@@ -106,6 +106,8 @@ All work before TICKET-0001 was done directly through conversation and recorded 
 
 * **TICKET-0090** (2026-07-11, Bug) - Fixed Linux Palworld startup in Docker by running the image as non-root `autopal`; root execution was explicitly refused by Palworld and left no game or REST listeners. Added 1 GiB shared memory, a larger file-descriptor limit, Steam app identity variables for Linux launches, and graceful Linux firewall unsupported responses. Rebuilt/recreated the test stack: UDP 8211 and TCP REST 8212 bound, Palworld REST `/metrics` returned real values, and application logs showed HTTP 200 metrics calls.
 
+* **TICKET-0091** (2026-07-11, Enhancement) - Increased Dashboard server-status polling from 4 seconds to 1 second. Added configurable `AUTOPAL_SHM_SIZE` with a 1 GiB default and documented that it controls `/dev/shm`, not total RAM; the container has no general RAM cap. Deliberately did not expose Docker's socket through the web UI because that would grant root-equivalent host control; `.env`/Portainer configuration followed by stack recreation is the safe control.
+
 ---
 
 Continue adding completed tickets in chronological order.
