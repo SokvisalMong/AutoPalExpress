@@ -92,6 +92,12 @@ The runtime image starts briefly as root only to run `docker-entrypoint.sh`, whi
 
 The process and SteamCMD services recognize Linux Palworld executable names and Linux SteamCMD archives in addition to the existing Windows paths. Palworld's REST management port remains internal to the container and is not published by the Compose stack.
 
+## Experimental Server Runtime Selection
+
+Each managed instance now stores `runtime` as `linux` or `windows`; missing values are migrated by inspecting the installed executable, defaulting to Linux when no binary is present. The runtime is independent of the backend host OS. A Linux host can deploy and launch the Windows server with Windows SteamCMD and Wine, while Linux runtime uses native Linux SteamCMD/server files. Config and Mods paths resolve from the instance runtime rather than `sys.platform`.
+
+Mods and UE4SS are Windows-runtime-only. The frontend hides the Mods navigation/page for Linux-runtime instances, and backend mod/UE4SS routes reject Linux-runtime requests. The create wizard puts Linux first and warns that Linux/Windows platform UUID differences make world/player-data transfer unsafe; there is intentionally no runtime-switch endpoint.
+
 ## Future Improvements
 
 * No automated test suite - correctness currently relies entirely on manual/live verification.

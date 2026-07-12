@@ -77,6 +77,7 @@ export interface DeployParams {
   gamePort: number;
   rconPort: number;
   maxPlayers: number;
+  runtime: "linux" | "windows";
   installParentDir?: string | null;
 }
 

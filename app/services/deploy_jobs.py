@@ -57,11 +57,17 @@ def _append(job_id: str, line: str) -> None:
 
 
 async def _run_deploy(
-    job_id: str, *, name: str, install_dir: Path, game_port: int, rcon_port: int, max_players: int
+    job_id: str,
+    *,
+    name: str,
+    install_dir: Path,
+    game_port: int,
+    rcon_port: int,
+    max_players: int,
+    runtime: str,
 ) -> None:
     try:
-        _append(job_id, "Preparing SteamCMD...")
-        await steamcmd.install_palserver(install_dir, on_output=lambda line: _append(job_id, line))
+        await steamcmd.install_palserver(install_dir, on_output=lambda line: _append(job_id, line), runtime=runtime)
 
         _append(job_id, "Writing initial server settings...")
         palworld_settings.initialize_settings(
@@ -70,6 +76,7 @@ async def _run_deploy(
             game_port=game_port,
             rcon_port=rcon_port,
             max_players=max_players,
+            runtime=runtime,
         )
 
         instance = instance_store.create_instance(
@@ -78,6 +85,7 @@ async def _run_deploy(
             source="deployed",
             game_port=game_port,
             rcon_port=rcon_port,
+            runtime=runtime,
         )
         _append(job_id, "Done.")
         _jobs[job_id]["instanceId"] = instance["id"]
@@ -91,13 +99,26 @@ async def _run_deploy(
         _jobs[job_id]["status"] = "error"
         _jobs[job_id]["error"] = str(e)
 
-
-def start_deploy(*, name: str, install_dir: Path, game_port: int, rcon_port: int, max_players: int) -> str:
+def start_deploy(
+    *,
+    name: str,
+    install_dir: Path,
+    game_port: int,
+    rcon_port: int,
+    max_players: int,
+    runtime: str = "linux",
+) -> str:
     job_id = f"deploy-{uuid.uuid4().hex[:10]}"
     _jobs[job_id] = {"status": "running", "log": [], "error": None, "instanceId": None}
     asyncio.create_task(
         _run_deploy(
-            job_id, name=name, install_dir=install_dir, game_port=game_port, rcon_port=rcon_port, max_players=max_players
+            job_id,
+            name=name,
+            install_dir=install_dir,
+            game_port=game_port,
+            rcon_port=rcon_port,
+            max_players=max_players,
+            runtime=runtime,
         )
     )
     return job_id

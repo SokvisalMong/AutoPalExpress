@@ -6,8 +6,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from app.services import steamcmd
-from app.services.steamcmd import SteamCmdError
+from app.services import server_runtime, steamcmd
 
 logger = logging.getLogger("palworld_admin.server_update")
 
@@ -27,7 +26,7 @@ def _append(job_id: str, line: str) -> None:
 async def check_for_update(instance: dict[str, Any]) -> dict[str, Any]:
     install_dir = Path(instance["serverPath"])
     installed = await asyncio.to_thread(steamcmd.installed_build_id, install_dir)
-    latest = await steamcmd.latest_public_build_id()
+    latest = await steamcmd.latest_public_build_id(runtime=server_runtime.normalize(instance.get("runtime")))
     return {
         "installedBuildId": installed,
         "latestBuildId": latest,
@@ -44,8 +43,11 @@ async def _run_update(job_id: str, instance: dict[str, Any]) -> None:
         _jobs[job_id]["latestBuildId"] = before["latestBuildId"]
 
         _append(job_id, "Running SteamCMD update/validate...")
-        await steamcmd.install_palserver(Path(instance["serverPath"]), on_output=lambda line: _append(job_id, line))
-
+        await steamcmd.install_palserver(
+            Path(instance["serverPath"]),
+            on_output=lambda line: _append(job_id, line),
+            runtime=server_runtime.normalize(instance.get("runtime")),
+        )
         after = await check_for_update(instance)
         _jobs[job_id]["installedBuildId"] = after["installedBuildId"]
         _jobs[job_id]["latestBuildId"] = after["latestBuildId"]

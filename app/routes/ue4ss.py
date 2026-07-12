@@ -3,7 +3,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException
 
-from app.services import instance_store, ue4ss_installer
+from app.services import instance_store, server_runtime, ue4ss_installer
 from app.services.ue4ss_installer import Ue4ssError
 
 logger = logging.getLogger("palworld_admin.ue4ss")
@@ -18,13 +18,20 @@ def _require_active_instance() -> dict[str, Any]:
     return instance
 
 
+def _require_windows_instance() -> dict[str, Any]:
+    instance = _require_active_instance()
+    if not server_runtime.is_windows(instance):
+        raise HTTPException(status_code=400, detail="UE4SS is supported only for Windows Binary servers.")
+    return instance
+
 @router.get("/status")
 async def get_status() -> dict[str, Any]:
-    return ue4ss_installer.get_status(instance_store.get_active())
+    return ue4ss_installer.get_status(_require_windows_instance())
 
 
 @router.get("/latest")
 async def get_latest() -> dict[str, Any]:
+    _require_windows_instance()
     try:
         return await ue4ss_installer.fetch_latest_release()
     except Ue4ssError as e:
@@ -33,7 +40,7 @@ async def get_latest() -> dict[str, Any]:
 
 @router.post("/install")
 async def install_ue4ss() -> dict[str, Any]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     try:
         return await ue4ss_installer.install(instance)
     except Ue4ssError as e:
@@ -45,6 +52,6 @@ async def install_ue4ss() -> dict[str, Any]:
 
 @router.post("/uninstall")
 async def uninstall_ue4ss() -> dict[str, Any]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     ue4ss_installer.uninstall(instance)
     return ue4ss_installer.get_status(instance)

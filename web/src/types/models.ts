@@ -211,12 +211,15 @@ export interface NexusModFile {
 
 
 export type ModsPathSource = "override" | "derived" | null;
+export type ServerRuntime = "linux" | "windows";
 export type InstanceSource = "steam" | "manual" | "deployed";
 
 export interface ServerInstance {
   id: string;
   name: string;
   serverPath: string;
+  runtime: ServerRuntime;
+  supportsMods: boolean;
   source: InstanceSource;
   gamePort: number;
   effectiveGamePort: number;

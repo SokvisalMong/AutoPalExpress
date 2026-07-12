@@ -749,3 +749,25 @@ The entrypoint may recursively `chown` `/data` and `/servers` once when their mo
 ### Date
 
 2026-07-12
+
+---
+
+### Decision
+
+Treat the Palworld server binary runtime as immutable per instance and default new servers to native Linux. Offer an experimental Windows runtime that uses native Windows execution on Windows hosts or Windows SteamCMD/PalServer through Wine on Linux.
+
+### Reason
+
+Palworld's Linux and Windows server binaries are not interchangeable for world/player data: platform UUIDs differ, and the available server-side evidence does not establish a safe cross-runtime migration. Runtime-specific paths and SteamCMD artifacts must therefore be selected from the instance record, not the backend host OS.
+
+### Alternatives
+
+Infer the binary from the host OS (rejected because Linux hosts can run Windows through Wine), allow switching later (rejected because it invites unsafe UUID migrations), or expose Mods/UE4SS for Linux (rejected because server-side mod support is unavailable there).
+
+### Consequences
+
+Existing instances migrate by executable detection; ambiguous/missing installs default to Linux. Mods and UE4SS are hidden and API-rejected for Linux runtimes. Linux hosts choosing Windows must preinstall a 64-bit Wine prefix, winbind, and VC++ 2015-2022 runtime, and this branch remains experimental until live testing succeeds.
+
+### Date
+
+2026-07-12

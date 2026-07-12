@@ -5,6 +5,7 @@ import { instancesApi } from "@/api";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RuneButton } from "@/components/fantasy/RuneButton";
 import { useNotifications } from "@/hooks/useNotifications";
 
@@ -18,6 +19,7 @@ type WizardStatus = "idle" | "running" | "done" | "error";
 
 export function DeployServerWizard({ open, onOpenChange, onDeployed }: DeployServerWizardProps) {
   const { t } = useTranslation();
+  const [runtime, setRuntime] = React.useState<"linux" | "windows">("linux");
   const [name, setName] = React.useState("");
   const [gamePort, setGamePort] = React.useState(8211);
   const [rconPort, setRconPort] = React.useState(8212);
@@ -36,6 +38,7 @@ export function DeployServerWizard({ open, onOpenChange, onDeployed }: DeploySer
       setLog([]);
       setStatus("idle");
       setError(null);
+      setRuntime("linux");
       setInstallParentDir("");
     }
   }, [open]);
@@ -75,6 +78,7 @@ export function DeployServerWizard({ open, onOpenChange, onDeployed }: DeploySer
         rconPort,
         maxPlayers,
         installParentDir: installParentDir.trim() || null,
+        runtime,
       });
       setJobId(id);
     } catch (e) {
@@ -125,6 +129,32 @@ export function DeployServerWizard({ open, onOpenChange, onDeployed }: DeploySer
                 autoFocus
               />
             </div>
+            <div className="space-y-1.5">
+              <Label>{t("settings.deploy.runtime", { defaultValue: "Server Binary" })}</Label>
+              <Select value={runtime} onValueChange={(value) => setRuntime(value as "linux" | "windows")}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="linux">{t("settings.deploy.runtimeLinux", { defaultValue: "Linux (Mods Unsupported)" })}</SelectItem>
+                  <SelectItem value="windows">{t("settings.deploy.runtimeWindows", { defaultValue: "Windows Binary (Mods Supported)" })}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="rounded-md border border-blood-500/40 bg-blood-950/30 px-3 py-2 text-xs leading-relaxed text-blood-200">
+              {t("settings.deploy.runtimeWarning", {
+                defaultValue:
+                  "Important: Do not switch this world between Linux and Windows later. Palworld platform UUIDs differ, so worlds and player data cannot be safely transferred between the two binaries. Choose once and stay with it.",
+              })}
+            </div>
+            {runtime === "windows" && (
+              <p className="text-[11px] leading-relaxed text-gold-300/70">
+                {t("settings.deploy.runtimeWindowsHint", {
+                  defaultValue:
+                    "Experimental Wine mode: use a 64-bit Wine prefix with winbind and the VC++ 2015-2022 runtime. AutoPalExpress installs Windows SteamCMD and launches PalServer.exe through Wine.",
+                })}
+              </p>
+            )}
             <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="deploy-port">{t("settings.deploy.gamePort", { defaultValue: "Game Port" })}</Label>

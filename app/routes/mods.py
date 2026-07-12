@@ -12,7 +12,16 @@ from pydantic import BaseModel
 
 from app import paths
 from app.auth_deps import require_super_admin
-from app.services import instance_store, local_config, mod_installer, mods_store, native_dialog, nexus_client, nexus_session
+from app.services import (
+    instance_store,
+    local_config,
+    mod_installer,
+    mods_store,
+    native_dialog,
+    nexus_client,
+    nexus_session,
+    server_runtime,
+)
 from app.services.mod_installer import ModInstallError
 from app.services.nexus_client import NexusApiError
 
@@ -33,6 +42,13 @@ def _require_active_instance() -> dict[str, Any]:
     instance = instance_store.get_active()
     if not instance:
         raise HTTPException(status_code=400, detail="No server selected. Create or import one in Settings.")
+    return instance
+
+
+def _require_windows_instance() -> dict[str, Any]:
+    instance = _require_active_instance()
+    if not server_runtime.is_windows(instance):
+        raise HTTPException(status_code=400, detail="Mods are supported only for Windows Binary servers.")
     return instance
 
 
@@ -172,6 +188,8 @@ async def get_mods_path() -> dict[str, Any]:
     instance = instance_store.get_active()
     if not instance:
         return {"modsPath": None, "source": None, "exists": False}
+    if not server_runtime.is_windows(instance):
+        return {"modsPath": None, "source": None, "exists": False}
     return _mods_path_view(instance)
 
 
@@ -181,7 +199,7 @@ class ModsPathRequest(BaseModel):
 
 @router.post("/mods-path", dependencies=[Depends(require_super_admin)])
 async def set_mods_path(body: ModsPathRequest) -> dict[str, Any]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     path = Path(body.path)
     if not path.is_dir():
         raise HTTPException(status_code=400, detail=f"'{body.path}' is not a folder that exists on this machine.")
@@ -191,14 +209,14 @@ async def set_mods_path(body: ModsPathRequest) -> dict[str, Any]:
 
 @router.delete("/mods-path")
 async def clear_mods_path() -> dict[str, Any]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     local_config.clear_mods_path_override(instance["id"])
     return _mods_path_view(instance)
 
 
 @router.post("/mods-path/browse", dependencies=[Depends(require_super_admin)])
 async def browse_mods_path() -> dict[str, Any]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     current = local_config.get_mods_path(instance)
     path = await asyncio.to_thread(native_dialog.pick_folder, "Select your UE4SS Mods folder", current)
     return {"path": path}
@@ -206,7 +224,7 @@ async def browse_mods_path() -> dict[str, Any]:
 
 @router.post("/{mod_id}/enable")
 async def enable_mod(mod_id: str) -> list[dict[str, Any]]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     mods = mods_store.load_mods(instance["id"])
     mods_path = local_config.get_mods_path(instance)
     for m in mods:
@@ -238,7 +256,7 @@ async def enable_mod(mod_id: str) -> list[dict[str, Any]]:
 
 @router.post("/{mod_id}/disable")
 async def disable_mod(mod_id: str) -> list[dict[str, Any]]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     mods = mods_store.load_mods(instance["id"])
     mods_path = local_config.get_mods_path(instance)
     for m in mods:
@@ -255,7 +273,7 @@ async def disable_mod(mod_id: str) -> list[dict[str, Any]]:
 
 @router.post("/{mod_id}/remove")
 async def remove_mod(mod_id: str) -> list[dict[str, Any]]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     mods = mods_store.load_mods(instance["id"])
     mods_path = local_config.get_mods_path(instance)
     target = next((m for m in mods if m["id"] == mod_id), None)
@@ -275,7 +293,7 @@ class ReorderRequest(BaseModel):
 
 @router.post("/reorder")
 async def reorder(body: ReorderRequest) -> list[dict[str, Any]]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     mods = mods_store.load_mods(instance["id"])
     order = {mod_id: i + 1 for i, mod_id in enumerate(body.orderedIds)}
     for m in mods:
@@ -312,13 +330,13 @@ async def get_nexus_mod_files(nexus_mod_id: int) -> list[dict[str, Any]]:
 
 @router.post("/from-nexus/{nexus_mod_id}/install", dependencies=[Depends(require_super_admin)])
 async def install_from_nexus(nexus_mod_id: int, file_id: int | None = None) -> list[dict[str, Any]]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     return await _install_nexus_mod(instance, nexus_mod_id, file_id)
 
 
 @router.post("/{mod_id}/update")
 async def update_mod(mod_id: str, file_id: int | None = None) -> list[dict[str, Any]]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     mods = mods_store.load_mods(instance["id"])
     target = next((m for m in mods if m["id"] == mod_id), None)
     if not target or not target.get("sourceModId"):
@@ -337,7 +355,7 @@ async def prepare_install_from_file(file: UploadFile = File(...)) -> dict[str, A
     Nexus really hosts, which is the whole point, but the *decision* to
     place external files into the live Mods folder still shouldn't be
     something any invited admin can do unilaterally."""
-    _require_active_instance()
+    _require_windows_instance()
     token = secrets.token_urlsafe(16)
     dest = VERIFIED_UPLOAD_DIR / f"{token}-{file.filename or 'upload.zip'}"
 
@@ -406,7 +424,7 @@ class ConfirmFileInstallRequest(BaseModel):
 
 @router.post("/install-from-file/confirm", dependencies=[Depends(require_super_admin)])
 async def confirm_install_from_file(body: ConfirmFileInstallRequest) -> list[dict[str, Any]]:
-    instance = _require_active_instance()
+    instance = _require_windows_instance()
     pending = _PENDING_VERIFIED_UPLOADS.pop(body.token, None)
     if not pending:
         raise HTTPException(status_code=404, detail="That upload has expired - try again.")

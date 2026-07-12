@@ -19,7 +19,7 @@ from typing import Any
 
 import psutil
 
-from app.services import activity_log, instance_store, palworld_settings, public_ip, steam_locator, upnp
+from app.services import activity_log, instance_store, palworld_settings, public_ip, server_runtime, steam_locator, upnp
 
 logger = logging.getLogger("palworld_admin.process_manager")
 
@@ -31,7 +31,7 @@ _started_at: dict[str, float] = {}
 _stopping: set[str] = set()
 _PALWORLD_PROCESS_NAMES = {
     name.lower()
-    for name in (*steam_locator.EXECUTABLE_NAMES, "PalServer-Win64-Shipping-Cmd.exe", "PalServer-Linux-Shipping")
+    for name in (*steam_locator.ALL_EXECUTABLE_NAMES, "PalServer-Win64-Shipping-Cmd.exe", "PalServer-Linux-Shipping")
 }
 
 
@@ -42,10 +42,11 @@ class ProcessError(Exception):
 
 
 def _exe_path(instance: dict[str, Any]) -> Path:
-    executable = steam_locator.find_server_executable(Path(instance["serverPath"]))
+    runtime = server_runtime.normalize(instance.get("runtime"))
+    executable = steam_locator.find_server_executable(Path(instance["serverPath"]), runtime)
     if executable is None:
-        expected = ", ".join(steam_locator.EXECUTABLE_NAMES)
-        raise ProcessError(f"No Palworld server executable was found in '{instance['serverPath']}' (expected one of: {expected}).")
+        expected = ", ".join(steam_locator.executable_names(runtime))
+        raise ProcessError(f"No {runtime} Palworld server executable was found in '{instance['serverPath']}' (expected one of: {expected}).")
     return executable
 
 
@@ -147,11 +148,11 @@ def start(instance: dict[str, Any]) -> None:
     with _lock:
         if _is_alive(instance_id) or _instance_processes(instance):
             raise ProcessError("This server is already running.")
-
         exe = _exe_path(instance)
         if not exe.is_file():
             raise ProcessError(f"Palworld server executable wasn't found at '{exe}'.")
 
+        runtime = server_runtime.normalize(instance.get("runtime"))
         game_port = instance_store.resolve_game_port(instance)
         game_port = palworld_settings.enforce_game_port(exe.parent, game_port, prefer_fallback=True)
         rest_config = palworld_settings.enforce_rest_api(exe.parent, instance.get("rconPort") or 8212)
@@ -190,6 +191,12 @@ def start(instance: dict[str, Any]) -> None:
             # blocked during startup before binding game or REST ports.
             launch_env.setdefault("SteamAppId", "2394010")
             launch_env.setdefault("SteamGameId", "2394010")
+
+        if runtime == server_runtime.WINDOWS_RUNTIME and sys.platform != "win32":
+            try:
+                launch_args.insert(0, server_runtime.wine_command())
+            except RuntimeError as e:
+                raise ProcessError(str(e)) from e
 
         proc = subprocess.Popen(
             launch_args,

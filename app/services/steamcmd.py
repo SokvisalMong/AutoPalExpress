@@ -16,8 +16,7 @@ from pathlib import Path
 import httpx
 
 from app.paths import data_dir
-from app.services import steam_locator
-
+from app.services import server_runtime, steam_locator
 logger = logging.getLogger("palworld_admin.steamcmd")
 
 STEAMCMD_DIR = data_dir() / "steamcmd"
@@ -31,6 +30,20 @@ else:
     STEAMCMD_ARCHIVE_NAME = "steamcmd_linux.tar.gz"
     STEAMCMD_ZIP_URL = "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
 
+
+def _paths(runtime: str) -> tuple[Path, Path, str, str]:
+    windows = server_runtime.normalize(runtime) == server_runtime.WINDOWS_RUNTIME
+    if windows:
+        root = data_dir() / ("steamcmd" if sys.platform == "win32" else "steamcmd_windows")
+        return root, root / "steamcmd.exe", "steamcmd.zip", "https://steamcdn-a.akamaihd.net/client/installer/steamcmd.zip"
+    root = data_dir() / "steamcmd"
+    return root, root / "steamcmd.sh", "steamcmd_linux.tar.gz", "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz"
+
+
+def _command(exe: Path, runtime: str) -> list[str]:
+    if server_runtime.normalize(runtime) == server_runtime.WINDOWS_RUNTIME and sys.platform != "win32":
+        return [server_runtime.wine_command(), str(exe)]
+    return [str(exe)]
 PALSERVER_APP_ID = "2394010"
 _PUBLIC_BUILD_RE = re.compile(r'"public"\s*\{.*?"buildid"\s*"(?P<buildid>\d+)"', re.DOTALL)
 
@@ -56,57 +69,55 @@ async def _run(args: list[str], on_output: Callable[[str], None] | None = None) 
     return await process.wait()
 
 
-async def ensure_steamcmd() -> Path:
-    if STEAMCMD_EXE.is_file():
-        return STEAMCMD_EXE
+async def ensure_steamcmd(runtime: str = server_runtime.LINUX_RUNTIME) -> Path:
+    root, exe, archive_name, archive_url = _paths(runtime)
+    root.mkdir(parents=True, exist_ok=True)
+    if exe.is_file():
+        return exe
 
-    logger.info("steamcmd: bootstrapping from %s", STEAMCMD_ZIP_URL)
-    archive_path = STEAMCMD_DIR / STEAMCMD_ARCHIVE_NAME
+    logger.info("steamcmd: bootstrapping from %s", archive_url)
+    archive_path = root / archive_name
     try:
         async with httpx.AsyncClient(timeout=60, follow_redirects=True) as client:
-            resp = await client.get(STEAMCMD_ZIP_URL)
+            resp = await client.get(archive_url)
             resp.raise_for_status()
             archive_path.write_bytes(resp.content)
     except httpx.HTTPError as e:
         raise SteamCmdError(f"Couldn't download SteamCMD: {e}")
 
     try:
-        if sys.platform == "win32":
+        if server_runtime.normalize(runtime) == server_runtime.WINDOWS_RUNTIME:
             with zipfile.ZipFile(archive_path) as archive:
-                archive.extractall(STEAMCMD_DIR)
+                archive.extractall(root)
         else:
             with tarfile.open(archive_path, "r:gz") as archive:
-                archive.extractall(STEAMCMD_DIR)
+                archive.extractall(root)
     except (tarfile.TarError, zipfile.BadZipFile):
         raise SteamCmdError("The downloaded SteamCMD archive was corrupt. Try again.")
     finally:
         archive_path.unlink(missing_ok=True)
 
-    if not STEAMCMD_EXE.is_file():
-        expected = STEAMCMD_EXE.name
-        raise SteamCmdError(f"Downloaded SteamCMD, but {expected} wasn't found after extracting it.")
-    if sys.platform != "win32":
-        STEAMCMD_EXE.chmod(STEAMCMD_EXE.stat().st_mode | 0o111)
+    if not exe.is_file():
+        raise SteamCmdError(f"Downloaded SteamCMD, but {exe.name} wasn't found after extracting it.")
+    if server_runtime.normalize(runtime) == server_runtime.LINUX_RUNTIME:
+        exe.chmod(exe.stat().st_mode | 0o111)
 
-    # SteamCMD's very first run always self-updates and commonly exits with a
-    # non-zero code when it does (this is normal, not a failure) - prime it
-    # here so the real install command below runs against an up-to-date,
-    # quiescent SteamCMD instead of hitting that mid-command.
     logger.info("steamcmd: priming first-run self-update")
-    await _run([str(STEAMCMD_EXE), "+quit"])
-    return STEAMCMD_EXE
+    await _run([*_command(exe, runtime), "+quit"])
+    return exe
 
 
-async def install_palserver(install_dir: Path, on_output: Callable[[str], None] | None = None) -> None:
-    """Runs SteamCMD to install (or update/repair) a standalone PalServer
-    copy into install_dir. Streams SteamCMD's own output line-by-line via
-    on_output so callers can show live progress for what is normally a
-    multi-minute, multi-gigabyte download."""
-    exe = await ensure_steamcmd()
+async def install_palserver(
+    install_dir: Path,
+    on_output: Callable[[str], None] | None = None,
+    runtime: str = server_runtime.LINUX_RUNTIME,
+) -> None:
+    """Runs SteamCMD to install (or update/repair) a standalone PalServer copy."""
+    exe = await ensure_steamcmd(runtime)
     install_dir.mkdir(parents=True, exist_ok=True)
 
     args = [
-        str(exe),
+        *_command(exe, runtime),
         "+force_install_dir", str(install_dir),
         "+login", "anonymous",
         "+app_update", PALSERVER_APP_ID, "validate",
@@ -124,8 +135,8 @@ async def install_palserver(install_dir: Path, on_output: Callable[[str], None] 
         if returncode != 0:
             raise SteamCmdError(f"SteamCMD exited with code {returncode}. Check the deploy log for details.")
 
-    if steam_locator.find_server_executable(install_dir) is None:
-        expected = ", ".join(steam_locator.EXECUTABLE_NAMES)
+    if steam_locator.find_server_executable(install_dir, runtime) is None:
+        expected = ", ".join(steam_locator.executable_names(runtime))
         raise SteamCmdError(f"SteamCMD finished, but no Palworld server executable was found (expected one of: {expected}).")
 
 
@@ -140,9 +151,11 @@ def installed_build_id(install_dir: Path) -> str | None:
     match = re.search(r'"buildid"\s*"(?P<buildid>\d+)"', text)
     return match.group("buildid") if match else None
 
-
-async def latest_public_build_id(on_output: Callable[[str], None] | None = None) -> str | None:
-    exe = await ensure_steamcmd()
+async def latest_public_build_id(
+    on_output: Callable[[str], None] | None = None,
+    runtime: str = server_runtime.LINUX_RUNTIME,
+) -> str | None:
+    exe = await ensure_steamcmd(runtime)
     lines: list[str] = []
 
     def collect(line: str) -> None:
@@ -151,7 +164,7 @@ async def latest_public_build_id(on_output: Callable[[str], None] | None = None)
             on_output(line)
 
     args = [
-        str(exe),
+        *_command(exe, runtime),
         "+login", "anonymous",
         "+app_info_update", "1",
         "+app_info_print", PALSERVER_APP_ID,

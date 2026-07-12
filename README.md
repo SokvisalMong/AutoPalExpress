@@ -75,6 +75,13 @@ If you just want to host a Palworld server for friends, AutoPalExpress handles t
 > [!TIP]
 > Run the same installer again to update or repair AutoPalExpress. If your existing app data is still present, setup keeps your server list and admin account and skips the first-time questions.
 
+## Experimental Linux And Wine Server Runtimes
+
+When creating a server, the **Server Binary** choice defaults to **Linux (Mods Unsupported)**. **Windows Binary (Mods Supported)** is experimental on Linux: AutoPalExpress downloads Windows SteamCMD and launches `PalServer.exe` through Wine. Follow the [Palworld Modded Server Linux Wine prerequisites](https://github.com/CuteNatalie/Palworld-Modded-Server-Linux) first (64-bit Wine prefix, winbind, and the VC++ 2015-2022 runtime).
+
+> [!WARNING]
+> Choose the binary once and keep it for the life of the world. Linux and Windows Palworld binaries produce different platform UUIDs; there is no safe server-side way to transfer worlds or player data between them. AutoPalExpress hides Mods and UE4SS controls for Linux-runtime servers.
+
 ## Remote Access And Security
 
 AutoPalExpress uses regular HTTP by default so setup can stay simple: no domain, certificate, reverse proxy, or manual browser-trust steps.

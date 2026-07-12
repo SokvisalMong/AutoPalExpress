@@ -151,6 +151,11 @@ export function InstanceManagerPanel() {
                     <span className="rounded-full border border-stone-600 bg-stone-800/60 px-2 py-0.5 text-[10px] uppercase tracking-wide text-parchment-300/60">
                       {t(`settings.instances.source.${SOURCE_LABEL_KEYS[instance.source].key}`, { defaultValue: SOURCE_LABEL_KEYS[instance.source].fallback })}
                     </span>
+                    <span className="rounded-full border border-stone-600 bg-stone-800/60 px-2 py-0.5 text-[10px] uppercase tracking-wide text-parchment-300/60">
+                      {instance.runtime === "windows"
+                        ? t("settings.instances.runtimeWindows", { defaultValue: "Windows Binary · Mods" })
+                        : t("settings.instances.runtimeLinux", { defaultValue: "Linux · Mods Unsupported" })}
+                    </span>
                     {active && (
                       <span className="rounded-full border border-gold-500/50 bg-gold-500/10 px-2 py-0.5 text-[10px] uppercase tracking-wide text-gold-300">
                         {t("settings.instances.active", { defaultValue: "Active" })}
@@ -169,11 +174,13 @@ export function InstanceManagerPanel() {
                       </span>
                     )}
                     <span>{t("settings.instances.port", { defaultValue: "Port {{port}}", port: instance.gamePort })}</span>
-                    <span>
-                      {instance.ue4ssInstalled
-                        ? t("settings.instances.ue4ssVersion", { defaultValue: "UE4SS {{version}}", version: instance.ue4ssVersion })
-                        : t("settings.instances.ue4ssNotInstalled", { defaultValue: "UE4SS not installed" })}
-                    </span>
+                    {instance.supportsMods && (
+                      <span>
+                        {instance.ue4ssInstalled
+                          ? t("settings.instances.ue4ssVersion", { defaultValue: "UE4SS {{version}}", version: instance.ue4ssVersion })
+                          : t("settings.instances.ue4ssNotInstalled", { defaultValue: "UE4SS not installed" })}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">

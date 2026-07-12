@@ -110,6 +110,7 @@ All work before TICKET-0001 was done directly through conversation and recorded 
 
 * **TICKET-0092** (2026-07-11, Bug) - Fixed the Dashboard roster only fetching once on mount. `PlayersSection` now polls `/api/players` immediately and once per second after each request completes, cancels in-flight scheduling on unmount, and keeps initial-load error behavior without repeating toast notifications for later transient failures. `npm run build` passed; `npm run lint` passed with five pre-existing warnings in unrelated files.
 * **TICKET-0093** (2026-07-12, Bug) - Fixed Docker Compose restart loops after reboot/recreate when root-owned bind mounts caused the non-root backend to fail creating `/data/instances`. Added `docker-entrypoint.sh` to repair `/data`/`/servers` ownership before dropping to `autopal`, documented manual `chown` fallback, and verified build, healthy API startup, and post-restart persistence.
+* **TICKET-0094** (2026-07-12, Feature, experimental branch) - Added immutable per-instance Linux/Windows runtime selection with Linux first/default, Wine-backed Windows SteamCMD/PalServer execution on Linux, runtime-specific config/Mods paths, and Windows-only Mods/UE4SS UI/API gating. Added UUID no-transfer warnings and documented Wine prerequisites. Implemented and verified with backend compilation, three focused unittest cases, frontend build, and lint (pre-existing warnings only); left open for live Wine/UE4SS/mod testing on `experimental/windows-server-runtime`, not merged to `main`.
 
 ---
 

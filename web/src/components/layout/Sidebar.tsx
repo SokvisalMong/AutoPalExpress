@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { LayoutDashboard, BookOpen, Swords, ScrollText, Settings2, Flame, SlidersHorizontal, Crown, Rocket } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useActiveInstance } from "@/hooks/useActiveInstance";
 
 const COMMON_ITEMS = [
   { to: "/", labelKey: "dashboard", icon: LayoutDashboard, end: true },
@@ -75,6 +76,8 @@ export function Sidebar() {
   const { user } = useAuth();
   const { t } = useTranslation();
   const isSuperAdmin = user.role === "super_admin";
+  const { instance, loading: instanceLoading } = useActiveInstance();
+  const commonItems = COMMON_ITEMS.filter((item) => item.to !== "/mods" || (!instanceLoading && !!instance?.supportsMods));
 
   return (
     <aside className="fixed inset-y-0 left-0 z-30 flex w-[76px] flex-col border-r border-stone-700/80 bg-gradient-to-b from-stone-900 via-abyss-900 to-abyss-950 bg-noise lg:w-64">
@@ -88,9 +91,8 @@ export function Sidebar() {
           <p className="text-[10px] uppercase tracking-[0.2em] text-parchment-300/40">Server Admin</p>
         </div>
       </div>
-
       <nav className="flex-1 space-y-1.5 overflow-y-auto px-2 py-5 lg:px-3">
-        {COMMON_ITEMS.map((item) => (
+        {commonItems.map((item) => (
           <NavItem key={item.to} {...item} />
         ))}
 

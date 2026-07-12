@@ -14,6 +14,7 @@ from app.services import (
     local_config,
     native_dialog,
     process_manager,
+    server_runtime,
     steam_locator,
     ue4ss_installer,
 )
@@ -22,16 +23,27 @@ logger = logging.getLogger("palworld_admin.instances")
 
 router = APIRouter()
 
-
 def _instance_view(instance: dict[str, Any]) -> dict[str, Any]:
     server_path = instance["serverPath"]
+    runtime = server_runtime.normalize(instance.get("runtime"))
     effective_game_port = instance_store.resolve_game_port(instance)
     exists = Path(server_path).is_dir()
-    executable_found = steam_locator.find_server_executable(Path(server_path)) is not None
-    mods_info = local_config.get_mods_path_info(instance)
+    executable_found = steam_locator.find_server_executable(Path(server_path), runtime) is not None
+    mods_info = (
+        local_config.get_mods_path_info(instance)
+        if runtime == server_runtime.WINDOWS_RUNTIME
+        else {"path": None, "source": None}
+    )
     mods_path = mods_info["path"]
-    ue4ss_status = ue4ss_installer.get_status(instance)
+    ue4ss_status = (
+        ue4ss_installer.get_status(instance)
+        if runtime == server_runtime.WINDOWS_RUNTIME
+        else {"installed": False, "installedVersion": None}
+    )
+    supportsMods = runtime == server_runtime.WINDOWS_RUNTIME
     return {
+        "runtime": runtime,
+        "supportsMods": supportsMods,
         **instance,
         "gamePort": effective_game_port,
         "effectiveGamePort": effective_game_port,
@@ -188,9 +200,14 @@ async def import_existing(body: ImportRequest) -> dict[str, Any]:
         raise HTTPException(
             status_code=400,
             detail=f"No Palworld server executable found in '{body.path}' "
-            f"(expected one of: {', '.join(steam_locator.EXECUTABLE_NAMES)}).",
+            f"(expected one of: {', '.join(steam_locator.ALL_EXECUTABLE_NAMES)}).",
         )
-    instance_store.create_instance(name=body.name, server_path=str(path), source="manual")
+    runtime = (
+        server_runtime.WINDOWS_RUNTIME
+        if steam_locator.find_server_executable(path, server_runtime.WINDOWS_RUNTIME)
+        else server_runtime.LINUX_RUNTIME
+    )
+    instance_store.create_instance(name=body.name, server_path=str(path), source="manual", runtime=runtime)
     data = instance_store.list_view()
     return {"activeId": data["activeId"], "instances": [_instance_view(i) for i in data["instances"]]}
 
@@ -202,7 +219,12 @@ async def import_detected() -> dict[str, Any]:
         raise HTTPException(
             status_code=404, detail="Couldn't find a Palworld Dedicated Server in any Steam library."
         )
-    instance_store.create_instance(name="Steam Library Server", server_path=str(found), source="steam")
+    runtime = (
+        server_runtime.WINDOWS_RUNTIME
+        if steam_locator.find_server_executable(found, server_runtime.WINDOWS_RUNTIME)
+        else server_runtime.LINUX_RUNTIME
+    )
+    instance_store.create_instance(name="Steam Library Server", server_path=str(found), source="steam", runtime=runtime)
     data = instance_store.list_view()
     return {"activeId": data["activeId"], "instances": [_instance_view(i) for i in data["instances"]]}
 
@@ -219,6 +241,7 @@ class DeployRequest(BaseModel):
     rconPort: int = 8212
     maxPlayers: int = 32
     installParentDir: str | None = None
+    runtime: str = server_runtime.LINUX_RUNTIME
 
 
 @router.post("/deploy/browse", dependencies=[Depends(require_super_admin)])
@@ -234,6 +257,16 @@ async def browse_deploy_parent() -> dict[str, Any]:
 async def deploy(body: DeployRequest) -> dict[str, Any]:
     if not body.name.strip():
         raise HTTPException(status_code=400, detail="Give the server a name.")
+    runtime = server_runtime.normalize(body.runtime)
+    if not server_runtime.host_can_run(runtime):
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Windows Binary (Mods Supported) requires Wine on Linux. Install the Wine prerequisites first."
+                if runtime == server_runtime.WINDOWS_RUNTIME
+                else "Linux Binary deployments require a Linux host."
+            ),
+        )
 
     install_parent = None
     if body.installParentDir and body.installParentDir.strip():
@@ -256,6 +289,7 @@ async def deploy(body: DeployRequest) -> dict[str, Any]:
         game_port=body.gamePort,
         rcon_port=body.rconPort,
         max_players=body.maxPlayers,
+        runtime=runtime,
     )
     return {"jobId": job_id}
 

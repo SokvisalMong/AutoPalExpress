@@ -60,6 +60,11 @@ You have two choices:
 > [!TIP]
 > You can put the server on another drive if your C drive is small.
 
+> [!WARNING]
+> In the create-server window, choose a **Server Binary**. Linux is the default and does not support mods. Windows Binary supports mods but is experimental on Linux and needs Wine, winbind, a 64-bit Wine prefix, and the VC++ 2015-2022 runtime.
+>
+> Choose carefully: Linux and Windows use different Palworld platform UUIDs. You cannot safely move this world or its player data between the two choices later, so keep the same binary forever.
+
 ## 4. Start The Server
 
 Go to **Server Control**.

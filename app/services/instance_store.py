@@ -17,6 +17,16 @@ from typing import Any
 from app import storage
 from app.paths import data_dir
 from app.services import palworld_settings
+from app.services import server_runtime, steam_locator
+
+def _infer_runtime(instance: dict[str, Any]) -> server_runtime.ServerRuntime:
+    stored = instance.get("runtime")
+    if stored in ("linux", "windows"):
+        return stored
+    path = Path(instance.get("serverPath", ""))
+    if steam_locator.find_server_executable(path, "windows") is not None:
+        return server_runtime.WINDOWS_RUNTIME
+    return server_runtime.LINUX_RUNTIME
 
 _STORE_NAME = "instances"
 
@@ -87,6 +97,10 @@ def _dedupe_data(data: dict[str, Any]) -> tuple[dict[str, Any], bool]:
         if instance.get("serverPath") != canonical_path:
             instance["serverPath"] = canonical_path
             changed = True
+        runtime = _infer_runtime(instance)
+        if instance.get("runtime") != runtime:
+            instance["runtime"] = runtime
+            changed = True
         if "usePerfThreads" not in instance:
             instance["usePerfThreads"] = bool(instance.get("performanceFlags", True))
             changed = True
@@ -155,7 +169,6 @@ def get_active_id() -> str | None:
 def get(instance_id: str) -> dict[str, Any] | None:
     return next((i for i in list_instances() if i["id"] == instance_id), None)
 
-
 def get_active() -> dict[str, Any] | None:
     active_id = get_active_id()
     return get(active_id) if active_id else None
@@ -164,11 +177,14 @@ def get_active() -> dict[str, Any] | None:
 def instance_dir(instance_id: str) -> Path:
     d = INSTANCES_DIR / instance_id
     d.mkdir(parents=True, exist_ok=True)
-    return d
-
-
 def create_instance(
-    *, name: str, server_path: str, source: str, game_port: int = 8211, rcon_port: int = 8212
+    *,
+    name: str,
+    server_path: str,
+    source: str,
+    game_port: int = 8211,
+    rcon_port: int = 8212,
+    runtime: server_runtime.ServerRuntime = server_runtime.LINUX_RUNTIME,
 ) -> dict[str, Any]:
     data = _load_clean()
     canonical_path = _canonical_server_path(server_path)
@@ -187,6 +203,7 @@ def create_instance(
         "name": name,
         "serverPath": canonical_path,
         "source": source,  # "deployed" | "steam" | "manual"
+        "runtime": server_runtime.normalize(runtime),
         "gamePort": game_port,
         "rconPort": rcon_port,
         "communityServer": False,

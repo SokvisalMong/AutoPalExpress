@@ -137,13 +137,15 @@ export default function Dashboard() {
           hint={t("dashboard.stats.versionHint", { defaultValue: "Server build" })}
         />
 
-        <StatTile
-          icon={<BookOpen />}
-          label={t("dashboard.stats.mods", { defaultValue: "Mods" })}
-          value={modCount ?? "-"}
-          accent="arcane"
-          hint={t("dashboard.stats.modsHint", { defaultValue: "Installed enchantments" })}
-        />
+        {instance?.supportsMods && (
+          <StatTile
+            icon={<BookOpen />}
+            label={t("dashboard.stats.mods", { defaultValue: "Mods" })}
+            value={modCount ?? "-"}
+            accent="arcane"
+            hint={t("dashboard.stats.modsHint", { defaultValue: "Installed enchantments" })}
+          />
+        )}
       </div>
 
       <PlayersSection />

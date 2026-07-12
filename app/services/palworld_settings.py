@@ -10,9 +10,10 @@ and only overwrites the handful of fields this tool actually sets.
 
 import re
 import secrets
-import sys
 from pathlib import Path
 from typing import Any
+
+from app.services import server_runtime
 
 _OPTION_LINE_RE = re.compile(r"^OptionSettings=\((.*)\)\s*$", re.MULTILINE)
 
@@ -20,12 +21,12 @@ _OPTION_LINE_RE = re.compile(r"^OptionSettings=\((.*)\)\s*$", re.MULTILINE)
 def _default_template_path(server_path: Path) -> Path:
     return server_path / "DefaultPalWorldSettings.ini"
 
-
-def _settings_ini_path(server_path: Path) -> Path:
-    config_names = ("WindowsServer", "LinuxServer") if sys.platform == "win32" else ("LinuxServer", "WindowsServer")
+def _settings_ini_path(server_path: Path, runtime: str | None = None) -> Path:
+    preferred = "WindowsServer" if server_runtime.normalize(runtime) == server_runtime.WINDOWS_RUNTIME else "LinuxServer"
+    alternate = "LinuxServer" if preferred == "WindowsServer" else "WindowsServer"
     candidates = tuple(
         server_path / "Pal" / "Saved" / "Config" / config_name / "PalWorldSettings.ini"
-        for config_name in config_names
+        for config_name in (preferred, alternate)
     )
     for candidate in candidates:
         if candidate.is_file():
@@ -168,9 +169,10 @@ def _read_ini_or_template_text(server_path: Path) -> str:
         return dest_path.read_text(encoding="utf-8-sig")
     return "[/Script/Pal.PalGameWorldSettings]\nOptionSettings=()\n"
 
-
-def _write_option_body(server_path: Path, text: str, match: re.Match[str] | None, body: str) -> None:
-    dest_path = _settings_ini_path(server_path)
+def _write_option_body(
+    server_path: Path, text: str, match: re.Match[str] | None, body: str, runtime: str | None = None
+) -> None:
+    dest_path = _settings_ini_path(server_path, runtime)
     dest_path.parent.mkdir(parents=True, exist_ok=True)
     new_line = f"OptionSettings=({body})"
     if match:
@@ -187,6 +189,7 @@ def initialize_settings(
     game_port: int,
     rcon_port: int | None = None,
     max_players: int | None = None,
+    runtime: str | None = None,
 ) -> Path:
     text = _read_ini_or_template_text(server_path)
     match = _OPTION_LINE_RE.search(text)
@@ -199,9 +202,8 @@ def initialize_settings(
         body = _set_field(body, "RESTAPIEnabled", "True")
     if max_players is not None:
         body = _set_field(body, "ServerPlayerMaxNum", str(max_players))
-
-    _write_option_body(server_path, text, match, body)
-    return _settings_ini_path(server_path)
+    _write_option_body(server_path, text, match, body, runtime)
+    return _settings_ini_path(server_path, runtime)
 
 
 # --- Full settings editor -----------------------------------------------

@@ -8,6 +8,7 @@
 - **TICKET-0091:** Dashboard server status and metrics now poll every second instead of every four seconds. Docker shared memory is configurable with `AUTOPAL_SHM_SIZE` (default `1gb`); this controls `/dev/shm`, not total container RAM, which remains uncapped.
 - **TICKET-0092:** Dashboard player roster now refreshes immediately and every second after each completed `/api/players` request, so players joining after the page loads become online without a manual refresh. Polling avoids overlapping requests and stops cleanly when leaving the Dashboard.
 - **TICKET-0093:** Fixed Docker Compose restart loops after reboot/recreate when root-owned `/data` or `/servers` bind mounts prevented the non-root backend from creating `/data/instances`. The runtime entrypoint now repairs mount ownership before dropping to `autopal`; the Linux deployment docs include the automatic recovery and manual `chown` fallback.
+- **TICKET-0094 (experimental):** Added per-server Linux (default, mods unsupported) and Windows Binary (Mods Supported) runtime selection. Linux-host Windows runtimes use Windows SteamCMD and PalServer through Wine; Mods/UE4SS navigation and APIs are gated to Windows runtimes. The create wizard warns that Linux/Windows platform UUID differences make world/player-data transfer unsafe. This work is isolated to `experimental/windows-server-runtime` and is not merged into `main`.
 
 ## 1.0.5 - 2026-07-11
 

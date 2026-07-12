@@ -19,15 +19,23 @@ except ImportError:  # pragma: no cover - only missing off Windows
 logger = logging.getLogger("palworld_admin.steam_locator")
 
 APP_ID = "2394010"
-if sys.platform == "win32":
-    EXECUTABLE_NAMES = ("PalServer.exe",)
-else:
-    EXECUTABLE_NAMES = ("PalServer.sh", "PalServer-Linux-Shipping", "PalServer")
+WINDOWS_EXECUTABLE_NAMES = ("PalServer.exe", "PalServer-Win64-Shipping-Cmd.exe", "PalServer-Win64-Test-Cmd.exe")
+LINUX_EXECUTABLE_NAMES = ("PalServer.sh", "PalServer-Linux-Shipping", "PalServer")
+EXECUTABLE_NAMES = WINDOWS_EXECUTABLE_NAMES if sys.platform == "win32" else LINUX_EXECUTABLE_NAMES
 EXE_NAME = EXECUTABLE_NAMES[0]
+ALL_EXECUTABLE_NAMES = tuple(dict.fromkeys((*WINDOWS_EXECUTABLE_NAMES, *LINUX_EXECUTABLE_NAMES)))
 
 
-def find_server_executable(server_path: Path) -> Path | None:
-    for name in EXECUTABLE_NAMES:
+def executable_names(runtime: str | None = None) -> tuple[str, ...]:
+    if runtime == "windows":
+        return WINDOWS_EXECUTABLE_NAMES
+    if runtime == "linux":
+        return LINUX_EXECUTABLE_NAMES
+    return ALL_EXECUTABLE_NAMES
+
+
+def find_server_executable(server_path: Path, runtime: str | None = None) -> Path | None:
+    for name in executable_names(runtime):
         candidate = server_path / name
         if candidate.is_file():
             return candidate
