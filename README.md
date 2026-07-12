@@ -231,6 +231,8 @@ The Compose bind mounts are:
 - `./data:/data` - accounts, sessions, settings, logs, mods, backups, SteamCMD cache, and default deployments.
 - `./servers:/servers` - optional host directory for existing Linux Palworld server installs to import.
 
+The image runs the app as non-root `autopal` (Palworld refuses root execution). Its startup entrypoint automatically repairs a root-owned `/data` or `/servers` bind mount before dropping privileges, which makes restarts/reboots recover from older root-running containers. If a permission error still prevents startup, stop the stack and run `sudo chown -R 1000:1000 data servers` (or the equivalent custom paths), then recreate it.
+
 For a different host location, set `AUTOPAL_DATA_PATH` and `AUTOPAL_SERVERS_PATH` in a `.env` file or in the Portainer stack environment. Keep these directories writable by the container.
 
 The stack does not cap total container RAM; Palworld can use available host memory. `AUTOPAL_SHM_SIZE` controls only `/dev/shm` shared memory (default `1gb`), not total Palworld RAM. Set it in `.env` or Portainer and recreate the stack if Unreal Engine needs more shared memory.

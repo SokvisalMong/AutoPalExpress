@@ -88,6 +88,8 @@ See `memory/tech_stack.md` for the full list and versions. The recurring theme: 
 
 `Dockerfile` uses a multi-stage build: Node compiles `web/`, then a Python runtime image serves the generated SPA and FastAPI app from one Uvicorn process. `docker-compose.yml` publishes the admin HTTP port plus configurable Palworld UDP game/query ports, mounts persistent `/data` and optional `/servers` storage, and checks `/api/auth/status` for health. `AUTOPAL_DATA_DIR` overrides the source/Windows data-location defaults so the container can persist state at `/data`.
 
+The runtime image starts briefly as root only to run `docker-entrypoint.sh`, which repairs root-owned bind-mounted `/data` and `/servers` trees when necessary, then uses `runuser` to execute Uvicorn as non-root `autopal`. This preserves Palworld's Linux non-root requirement while allowing reboot/recreate recovery from mounts created by an older root-running image.
+
 The process and SteamCMD services recognize Linux Palworld executable names and Linux SteamCMD archives in addition to the existing Windows paths. Palworld's REST management port remains internal to the container and is not published by the Compose stack.
 
 ## Future Improvements

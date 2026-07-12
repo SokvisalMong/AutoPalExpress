@@ -727,3 +727,25 @@ The Compose stack publishes the admin HTTP port and configurable Palworld UDP ga
 ### Date
 
 2026-07-11
+
+---
+
+### Decision
+
+Start the Docker runtime as root only long enough to repair root-owned persistent bind mounts, then drop to the non-root `autopal` user before running Uvicorn.
+
+### Reason
+
+The Linux image must not run Palworld as root, but the Compose bind mounts can retain root ownership from an earlier root-running image or host-side copy. After reboot/recreate, the backend then failed during import with `PermissionError` while creating `/data/instances`, causing an `unless-stopped` restart loop. A small entrypoint resolves the ownership mismatch before application startup without asking operators to know the image UID.
+
+### Alternatives
+
+Document only a manual `chown` repair (rejected because it leaves reboot/recreate recovery fragile), run the whole container as root (rejected because Palworld explicitly refuses root), or add a privileged sidecar (rejected as unnecessary extra surface and lifecycle complexity).
+
+### Consequences
+
+The entrypoint may recursively `chown` `/data` and `/servers` once when their mount-point owner differs from `autopal`; this can take time for large server trees and changes ownership of files in those dedicated mounts. Uvicorn and child Palworld processes still run as non-root. Manual `sudo chown -R 1000:1000` guidance remains available for custom or shared mount setups.
+
+### Date
+
+2026-07-12

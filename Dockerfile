@@ -26,12 +26,15 @@ COPY app/ ./app/
 COPY support/ ./support/
 COPY Palworld_Server.py ./
 COPY --from=frontend /src/web/dist ./web/dist
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN useradd --create-home --shell /bin/bash autopal \
-    && mkdir -p /data \
-    && chown -R autopal:autopal /data
+    && mkdir -p /data /servers \
+    && chown -R autopal:autopal /data /servers \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
 
-USER autopal
+USER root
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 EXPOSE 8000
 

@@ -46,13 +46,17 @@ The default mounts are:
 
 These directories must remain in place when the container is updated. They contain the state that should survive image rebuilds.
 
-The image runs as a non-root `autopal` user. This is required by Palworld's Linux server, which refuses to start as root. New host directories created by the deploying user normally work automatically; existing server trees copied from a root-owned location must be made readable and writable before import.
+The image runs the application as a non-root `autopal` user. This is required by Palworld's Linux server, which refuses to start as root. On startup, the container entrypoint checks the mounted `/data` and `/servers` paths and repairs ownership when their mount-point is not owned by `autopal`; this handles bind mounts left root-owned by an older image or by a previous host-side copy. The repair runs before Uvicorn starts, then the application drops privileges and runs as `autopal`.
 
-If Docker reports a permission error, make the directories writable by the account that manages the deployment:
+If Docker reports a permission error after a failed or interrupted deployment, stop the stack and repair the host paths explicitly before starting it again:
 
 ```bash
-chmod -R u+rwX data servers
+docker compose down
+sudo chown -R 1000:1000 data servers
+docker compose up -d --build
 ```
+
+Use the same `sudo chown -R 1000:1000` command for custom `AUTOPAL_DATA_PATH` and `AUTOPAL_SERVERS_PATH` directories. Do not run the application itself as root: Palworld's Linux executable refuses root execution.
 
 ## 3. Configure ports
 
