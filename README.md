@@ -200,7 +200,13 @@ For the complete Linux runbook, see [`LINUX_DOCKER_DEPLOYMENT.md`](LINUX_DOCKER_
 
 ### Docker Compose
 
-On a Linux host with Docker and Compose installed:
+On a Linux host with Docker and Compose installed, first verify that the account running Compose can access the Docker daemon:
+
+```bash
+docker info
+```
+
+If this reports permission denied for `/var/run/docker.sock`, follow the [Docker daemon access](LINUX_DOCKER_DEPLOYMENT.md#docker-daemon-access) steps before running Compose. The error is a host Docker permission problem, not an AutoPalExpress image error.
 
 ```bash
 mkdir -p data servers

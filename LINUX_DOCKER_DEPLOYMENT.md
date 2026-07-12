@@ -10,6 +10,38 @@ It applies to Linux distributions that already have:
 
 Python, Node.js, npm, and SteamCMD do **not** need to be installed directly on the Linux host. The Docker image supplies the application runtime and builds the frontend.
 
+## Docker daemon access
+
+The `docker compose` command must be run by a host account that can access Docker's Unix socket. Before building AutoPalExpress, test that access:
+
+```bash
+docker info
+```
+
+If this returns `permission denied while trying to connect to the Docker API at unix:///var/run/docker.sock`, the problem is on the Linux host; the image has not started yet. Start Docker and confirm that the privileged client works:
+
+```bash
+sudo systemctl enable --now docker
+sudo docker info
+```
+
+For normal system Docker installations, give your login account access to the `docker` group:
+
+```bash
+sudo usermod -aG docker "$USER"
+newgrp docker
+docker info
+```
+
+If `docker info` still reports the same error, log out and back in (or reboot) so the new group membership is applied, then run it again. As a one-time workaround, the Compose command can be run with `sudo`:
+
+```bash
+sudo docker compose up -d --build
+```
+
+The `docker` group grants root-equivalent control of the host. Do not make `/var/run/docker.sock` world-writable with `chmod 666`. If the server intentionally uses rootless Docker, use that user's rootless daemon/context instead of mixing it with the system Docker socket.
+
+
 ## 1. Get the project
 
 Install Git using your distribution's normal package manager if it is not already available. Alternatively, download and extract the repository archive.

@@ -8,6 +8,7 @@
 - **TICKET-0091:** Dashboard server status and metrics now poll every second instead of every four seconds. Docker shared memory is configurable with `AUTOPAL_SHM_SIZE` (default `1gb`); this controls `/dev/shm`, not total container RAM, which remains uncapped.
 - **TICKET-0092:** Dashboard player roster now refreshes immediately and every second after each completed `/api/players` request, so players joining after the page loads become online without a manual refresh. Polling avoids overlapping requests and stops cleanly when leaving the Dashboard.
 - **TICKET-0093:** Fixed Docker Compose restart loops after reboot/recreate when root-owned `/data` or `/servers` bind mounts prevented the non-root backend from creating `/data/instances`. The runtime entrypoint now repairs mount ownership before dropping to `autopal`; the Linux deployment docs include the automatic recovery and manual `chown` fallback.
+- **TICKET-0095:** Documented the Docker daemon permission fix for fresh Linux hosts. The deployment guide now checks Docker socket access, explains the standard `docker`-group setup and one-time `sudo` workaround, warns against making the socket world-writable, and the README links directly to the recovery steps.
 
 ## 1.0.5 - 2026-07-11
 

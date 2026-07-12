@@ -111,6 +111,8 @@ All work before TICKET-0001 was done directly through conversation and recorded 
 * **TICKET-0092** (2026-07-11, Bug) - Fixed the Dashboard roster only fetching once on mount. `PlayersSection` now polls `/api/players` immediately and once per second after each request completes, cancels in-flight scheduling on unmount, and keeps initial-load error behavior without repeating toast notifications for later transient failures. `npm run build` passed; `npm run lint` passed with five pre-existing warnings in unrelated files.
 * **TICKET-0093** (2026-07-12, Bug) - Fixed Docker Compose restart loops after reboot/recreate when root-owned bind mounts caused the non-root backend to fail creating `/data/instances`. Added `docker-entrypoint.sh` to repair `/data`/`/servers` ownership before dropping to `autopal`, documented manual `chown` fallback, and verified build, healthy API startup, and post-restart persistence.
 
+* **TICKET-0095** (2026-07-12, Bug) - Documented the host-level Docker API permission failure that can block a fresh `docker compose up` before AutoPalExpress starts. The Linux runbook now checks `docker info`, starts/enables the Docker service, explains `docker`-group membership and the one-time `sudo` workaround, warns about root-equivalent access, and rejects world-writable Docker sockets. README Compose quick start links to the recovery steps. Documentation commands and repository paths reviewed.
+
 ---
 
 Continue adding completed tickets in chronological order.
