@@ -113,6 +113,8 @@ All work before TICKET-0001 was done directly through conversation and recorded 
 
 * **TICKET-0095** (2026-07-12, Bug) - Documented the host-level Docker API permission failure that can block a fresh `docker compose up` before AutoPalExpress starts. The Linux runbook now checks `docker info`, starts/enables the Docker service, explains `docker`-group membership and the one-time `sudo` workaround, warns about root-equivalent access, and rejects world-writable Docker sockets. README Compose quick start links to the recovery steps. Documentation commands and repository paths reviewed.
 
+* **TICKET-0096** (2026-10-26, Feature) - Added root `backup.sh`/`restore.sh` and standard-library Python helpers for complete Linux/Docker migration. Captures project files and actual bind/named-volume storage after forced save/graceful shutdown and container stop; emits a verified archive/checksum. Restore validates/stages into an empty destination, remaps host paths into `.autopal-migration/storage`, preserves instance IDs/accounts, and writes `compose.migration.json` without startup. Verified real amd64 Docker roundtrips, existing HTTP admin login, custom storage, repeated migration, literal-dollar settings, and archive/destination refusal cases. REST shutdown sequencing used a disposable protocol process, not the Palworld engine. Updated deployment/security/ownership guidance and generated-file ignores.
+
 ---
 
 Continue adding completed tickets in chronological order.

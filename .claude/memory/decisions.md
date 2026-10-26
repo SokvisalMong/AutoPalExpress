@@ -749,3 +749,25 @@ The entrypoint may recursively `chown` `/data` and `/servers` once when their mo
 ### Date
 
 2026-07-12
+
+---
+
+### Decision
+
+Provide full Linux/Docker migration through two root-level Bash entry points backed by Python 3.10+ standard-library helpers, a versioned TAR manifest, and a required SHA-256 sidecar.
+
+### Reason
+
+The user needs runnable whole-deployment backup/restore commands. The in-app backup only copies SaveGames. Archiving a guessed `data/` path misses custom bind mounts, named volumes, external server installations, and effective Portainer environment/ports. Docker inspection/copy captures the actual persistent storage without requiring direct host access to Docker's root-owned volume directories.
+
+### Alternatives
+
+Plain `tar data servers` (incomplete for custom storage), adding another pip/CLI dependency for metadata parsing (unnecessary), and restoring into occupied folders (risk of silently replacing live state).
+
+### Consequences
+
+Backup performs a forced REST save and graceful shutdown, then leaves the old container stopped. Restore validates and stages before installing into an empty destination, preserves container-side paths/instance IDs, converts captured volumes into project-local binds, and writes a relocated `compose.migration.json`. Restore never starts services; the snapshot must be selected explicitly for later Compose operations. Checksums detect corruption, not authenticity, and archives remain unencrypted. Host Python is required only for these optional commands. Docker layers/OS/network state are excluded; rebuilding needs internet access. Unsupported external dependencies and unsafe entries are rejected rather than silently skipped.
+
+### Date
+
+2026-10-26

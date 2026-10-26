@@ -14,3 +14,7 @@ build/
 installer_output/
 web/node_modules/
 web/dist/
+backups/
+.autopal-migration/
+compose.migration.json
+.env
