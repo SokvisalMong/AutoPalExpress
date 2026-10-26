@@ -8,7 +8,7 @@ It applies to Linux distributions that already have:
 - The Docker Compose plugin installed (`docker compose`, with a space).
 - Internet access from the host for the image build and, if needed, SteamCMD.
 
-Python, Node.js, npm, and SteamCMD do **not** need to be installed directly on the Linux host. The Docker image supplies the application runtime and builds the frontend.
+Python, Node.js, npm, and SteamCMD do **not** need to be installed directly on the Linux host to run the application. The optional full-deployment backup/restore scripts require **Python 3.10+** on the host, using only its standard library.
 
 ## Docker daemon access
 
@@ -289,29 +289,103 @@ The Palworld process runs inside the AutoPalExpress container. The Compose UDP m
 
 `127.0.0.1:8211` is a UDP game endpoint, not an HTTP page. Do not test it with a browser or `curl`; connect to it from the Palworld client. The REST API uses TCP `8212` inside the container and is intentionally not published to the host.
 
-## 10. Update the deployment
+## 10. Back up, migrate, and update
 
-Back up persistent state before an update:
+### Create a full backup
+
+Run from the AutoPalExpress repository root. The backup command requires host Python 3.10+, Docker CLI/Compose, access to the Docker daemon, and an existing AutoPalExpress container. It also works when that container is already stopped.
 
 ```bash
-tar -czf autopalexpress-data-backup-$(date +%F).tar.gz data
+python3 --version
+bash backup.sh
 ```
 
-Pull the latest project files and rebuild:
+The command asks permission for downtime, forces a save and requests REST shutdown for every running registered Palworld instance, waits for game processes to exit, and stops AutoPalExpress before copying files. A failed save/shutdown or an unregistered game process aborts the backup; there is no force-kill or stale-save fallback. If REST is unavailable, save and stop the game manually first. **Nothing restarts automatically, even after an error.** Check the old server's state if the command fails.
+
+The archive contains:
+
+- Project files, including `.env`, Git metadata when present in the project, local files, and the migration commands.
+- Every persistent bind mount or named volume attached to the container: application accounts/sessions/settings/logs/history/backups and complete Palworld binaries, saves, configuration, and mods.
+- Resolved Compose configuration, actual container environment, published ports, shared memory size, and image platform.
+
+It discovers the actual container mounts instead of assuming `./data` and `./servers`. Registered server paths and custom mod paths outside captured mounts are refused, not silently omitted.
+
+The default output is `backups/autopalexpress-<UTC-time>-<unique-id>.tar.gz` with a matching `.tar.gz.sha256`. Both filenames are printed. The archive is private to the invoking user, but **not encrypted**; it contains credentials, sessions, and potentially API keys. Transfer/store it securely. A checksum detects corruption, not a malicious or untrusted backup.
+
+Optional arguments:
 
 ```bash
+# Put archives on another disk, outside all mounted storage.
+bash backup.sh --output-dir /mnt/backups/autopalexpress
+
+# Select the existing Portainer container explicitly.
+bash backup.sh --container YOUR_CONTAINER_NAME
+
+# Acknowledge downtime without a prompt.
+bash backup.sh --yes
+```
+
+For Portainer, the repository's resolved Compose mount targets must match the selected container. Live container mount sources, environment and port settings are captured even when Portainer supplied values outside `.env`.
+
+The output directory, the project's `backups/`, and generated `.autopal-migration/` metadata are excluded from the project payload to prevent recursive archives. Persistent storage under `.autopal-migration/` is still captured separately through its mounts, so backing up a restored deployment works. No old backup files are deleted automatically.
+
+This is an application migration, not a host disk image. Docker image layers, OS packages, router/firewall/DNS rules, and unrelated host services are not included. Rebuilding needs Docker/Compose and internet access. The scripts support the single `autopalexpress` Compose service and project-root build context. Extra services, external networks/secrets/configs, external build inputs, tmpfs/device mounts, special files, and escaping/absolute symlinks are refused rather than producing an incomplete or unsafe archive.
+
+### Restore onto a new server
+
+1. Transfer **both** the archive and its `.sha256` sidecar, keeping their filenames together.
+2. Clone/download a current AutoPalExpress checkout on the new server so `restore.sh` and `scripts/` are available. Host Python 3.10+ is required; extraction itself does not need Docker.
+3. Choose a **nonexistent or empty, nonsymlink** destination. Its parent directory must already exist. Do not use the nonempty checkout containing the restore command as the destination.
+
+From that checkout, replacing the example archive path:
+
+```bash
+bash restore.sh /path/to/backup.tar.gz /srv/autopalexpress-restored
+```
+
+Use `--yes` to acknowledge restore without a prompt. There is deliberately no overwrite option.
+
+Restore verifies the checksum, manifest, member paths and links before extracting into private staging. The completed project is installed atomically. Existing occupied destinations are left untouched. Regular permissions/executable bits are retained, special permission bits are stripped, and extracted files belong to the restoring user rather than arbitrary archived UIDs.
+
+All captured storage is restored under:
+
+```text
+/srv/autopalexpress-restored/.autopal-migration/storage/<mount-id>
+```
+
+Named volumes become local bind directories. The generated `compose.migration.json` maps these new host paths to the **original container paths**, preserving `instances.json` IDs and server/mod paths. It also relocates the build context and retains the resolved settings. Original deployment files remain available; the source Compose snapshot is saved in `.autopal-migration/source-compose.json`.
+
+The image repairs ownership of `/data` and `/servers` on startup. If restoring with a different UID or using additional custom mounts, ensure all restored storage is accessible to the image's `autopal` UID/GID (`1000:1000` in the standard image):
+
+```bash
+sudo chown -R 1000:1000 /srv/autopalexpress-restored/.autopal-migration/storage
+```
+
+Review the generated configuration, especially published host IP/port bindings and public address overrides. Then explicitly start:
+
+```bash
+cd /srv/autopalexpress-restored
+docker compose -f compose.migration.json up -d --build
+docker compose -f compose.migration.json ps
+```
+
+**Always use `-f compose.migration.json` for a restored deployment**, including logs, restart and update commands. Its values are already resolved; changing the old `.env` does not reconfigure them. Edit the snapshot when changing ports or other deployment settings. Literal `$` characters in resolved string values are represented as `$$` for Compose.
+
+Restore never starts the panel or game automatically. Once the panel starts, a previously enabled active-server auto-start setting still applies. Verify existing admin login, selected instance, world/player/guild/base progress, mods, settings, and a save/restart before cutover. Reconfigure firewall/router/DNS for the new host. Keep the old deployment stopped but intact; never let players use both world copies.
+
+### Update an existing deployment
+
+Take a full backup first, then pull the latest project files and rebuild:
+
+```bash
+bash backup.sh
 git pull
 docker compose up -d --build
 ```
 
-Check the updated service:
+For a restored deployment, replace the last command with `docker compose -f compose.migration.json up -d --build`.
 
-```bash
-docker compose ps
-docker compose logs --tail=100 autopalexpress
-```
-
-Accounts, settings, server registrations, mods, backups, and other files in `data/` remain outside the image.
+Check the updated service with `docker compose ps` and `docker compose logs --tail=100 autopalexpress` (add the same `-f` option after `compose` when restored).
 
 ## 11. Stop, start, and restart
 

@@ -249,6 +249,28 @@ In Portainer, choose **Stacks → Add stack**, load this repository's `docker-co
 
 The container can manage a Linux Palworld server installed through its in-app SteamCMD flow or imported from `/servers`. For a server installed outside the stack, mount its parent directory with `AUTOPAL_SERVERS_PATH` and import the container path, not the host path.
 
+## Linux Backup and Server Migration
+
+From the AutoPalExpress project root, with Docker/Compose access and **Python 3.10+** on the host:
+
+```bash
+bash backup.sh
+```
+
+This saves and shuts down running Palworld instances, stops the container, and creates a full `.tar.gz` plus `.sha256` in `backups/`. It includes project files (including `.env`), accounts/settings/history, and complete server files from the actual bind mounts or named volumes. **The old deployment remains stopped.** A failed live save aborts rather than copying stale saves.
+
+Transfer both output files securely. On the new server, run this from a checkout containing `restore.sh` and `scripts/`, using an empty or nonexistent destination whose parent already exists:
+
+```bash
+bash restore.sh /path/to/backup.tar.gz /srv/autopalexpress-restored
+cd /srv/autopalexpress-restored
+docker compose -f compose.migration.json up -d --build
+```
+
+Restore verifies the checksum and safe archive paths, refuses existing data, and remaps storage into `.autopal-migration/storage/` while preserving container paths and instance IDs. It does not start services. Keep using `-f compose.migration.json` for the restored deployment; its resolved settings replace the old host-specific mounts and `.env` interpolation.
+
+See the [full backup and migration instructions](LINUX_DOCKER_DEPLOYMENT.md#10-back-up-migrate-and-update) for custom output directories, Portainer container selection, ownership, limitations, and cutover checks. The in-app **Backup Now** remains a separate, save-only backup.
+
 ## Where Data Is Stored
 
 When installed, app data is stored under:

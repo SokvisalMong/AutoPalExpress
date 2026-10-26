@@ -17,3 +17,8 @@ installer_output/
 
 # Runtime log
 backend.log
+
+# Full-deployment archives and restored snapshots contain credentials.
+backups/
+.autopal-migration/
+compose.migration.json

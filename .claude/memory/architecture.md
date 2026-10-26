@@ -92,6 +92,16 @@ The runtime image starts briefly as root only to run `docker-entrypoint.sh`, whi
 
 The process and SteamCMD services recognize Linux Palworld executable names and Linux SteamCMD archives in addition to the existing Windows paths. Palworld's REST management port remains internal to the container and is not published by the Compose stack.
 
+### Full deployment migration
+
+Root-level `backup.sh` and `restore.sh` call standard-library Python 3.10+ host commands in `scripts/server_backup.py` and `scripts/server_restore.py`. Shared `scripts/migration_common.py` owns Docker/Compose discovery, streaming mount copies, SHA-256 checksums, archive validation, and safe extraction. This is separate from the save-only in-app backup service.
+
+Backup reads the actual container mounts, checks all registered server/custom mod paths are covered, saves and gracefully shuts down running games through existing REST/process services, then stops the container. A versioned gzip TAR stores `project/`, `mounts/<id>`, and `manifest.json`; a required `.sha256` sidecar detects corruption. Actual environment/ports/platform/shared memory are preserved. The output directory and generated migration metadata are excluded from the project tree; mounted storage is captured separately.
+
+Restore validates before extracting into private staging, refuses nonempty/symlink destinations, and installs by atomic rename. It retains container paths/instance IDs but moves every mount (including named volumes) into `.autopal-migration/storage/<id>` under the new project. `compose.migration.json` relocates mounts/build inputs and stores resolved Compose settings, including escaped literal dollars. Original deployment files and a source Compose snapshot remain available. Startup is explicit using `docker compose -f compose.migration.json ...`; subsequent backups automatically prefer that snapshot. No game or application process starts during restore.
+
+Archives include sensitive application state, but not Docker image layers, OS state, or external networking. Rebuild requires network access. Unsupported multi-service/external inputs or unsafe archive entries fail instead of being silently omitted. Regular modes are preserved without arbitrary archived ownership/special permission bits; the existing entrypoint repairs standard mount ownership, while additional custom mounts may require host-side ownership adjustment.
+
 ## Future Improvements
 
 * No automated test suite - correctness currently relies entirely on manual/live verification.
